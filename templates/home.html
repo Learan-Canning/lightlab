@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LightLab</title>
+</head>
+<body>
+    <h1>LightLab Products</h1>
+    
+    {% for product in products %}
+    <div>
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="220"> {% else %} <p>No image yet</p> {% endif %}
+        <h2>{{ product.name }}</h2>
+        <p>£{{ product.price }}</p>
+        <p>{{ product.description }}</p>
+    </div>
+    {% endfor %}
+</body>
+</html>
