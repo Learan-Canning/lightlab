@@ -1,19 +1,187 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>LightLab</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8",
+            llsoft: "#efe8f8",
+            llcard: "#ffffff"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'site.css' %}">
 </head>
-<body>
-    <h1>LightLab Products</h1>
-    
-    {% for product in products %}
-    <div>
-        {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="220"> {% else %} <p>No image yet</p> {% endif %}
-        <h2>{{ product.name }}</h2>
-        <p>£{{ product.price }}</p>
-        <p>{{ product.description }}</p>
+<body class="bg-llbg text-lltext font-body antialiased">
+  <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+        ☰
+      </button>
+
+      <a href="#home" class="text-3xl font-heading leading-none">
+        Light<span class="text-llprimary">Lab</span>
+      </a>
+
+      <a href="#products" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+        🛍️
+      </a>
+
+      <nav class="hidden md:flex gap-7 text-sm font-medium ml-8">
+        <a href="#home" class="hover:text-llprimary">Home</a>
+        <a href="#products" class="hover:text-llprimary">Shop</a>
+        <a href="#certificates" class="hover:text-llprimary">Certificates</a>
+        <a href="#about" class="hover:text-llprimary">About</a>
+        <a href="#faq" class="hover:text-llprimary">FAQ</a>
+        <a href="#contact" class="hover:text-llprimary">Contact</a>
+      </nav>
     </div>
-    {% endfor %}
+
+      <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+          <a href="#home" class="hover:text-llprimary">Home</a>
+          <a href="#products" class="hover:text-llprimary">Shop</a>
+          <a href="#certificates" class="hover:text-llprimary">Certificates</a>
+          <a href="#about" class="hover:text-llprimary">About</a>
+          <a href="#faq" class="hover:text-llprimary">FAQ</a>
+          <a href="#contact" class="hover:text-llprimary">Contact</a>
+        </div>
+      </nav>
+  </header>
+
+  <main id="home">
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-12 text-center">
+      <p class="inline-block px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-wide">
+        PREMIUM RESEARCH PRODUCTS
+      </p>
+      <h1 class="mt-6 text-5xl sm:text-6xl md:text-7xl font-heading leading-tight">
+        Premium Research Products.
+        <span class="block text-llprimary">Beautifully Presented.</span>
+      </h1>
+      <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-[#5f5670]">
+        Discover a refined, modern research brand focused on quality, presentation, and trust.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#products" class="px-7 py-3 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">Shop Now</a>
+        <a href="#certificates" class="px-7 py-3 rounded-full bg-white border border-[#e8e0f2] font-semibold hover:bg-llsoft transition">View Certificates</a>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm">
+      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Quality Assured</span>
+      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Fast Dispatch</span>
+      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Batch Documented</span>
+</div>
+    </section>
+
+     <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <h3 class="font-heading text-2xl mb-2">Premium Presentation</h3>
+          <p class="text-[#645c74]">Beautifully packaged products that reflect quality and care.</p>
+        </article>
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <h3 class="font-heading text-2xl mb-2">Quality Focused</h3>
+          <p class="text-[#645c74]">Every product is carefully sourced, tested, and documented.</p>
+        </article>
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <h3 class="font-heading text-2xl mb-2">Batch Documentation</h3>
+          <p class="text-[#645c74]">Full certificates of analysis available for every batch.</p>
+        </article>
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <h3 class="font-heading text-2xl mb-2">Fast Dispatch</h3>
+          <p class="text-[#645c74]">Orders processed and dispatched swiftly with care.</p>
+        </article>
+      </div>
+      
+    </section>
+
+    <section id="products" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="flex items-end justify-between mb-6">
+        <h2 class="text-3xl sm:text-4xl font-heading">Shop</h2>
+        <p class="text-sm text-[#6f6780]">{{ products|length }} products</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in products %}
+          <article class="bg-llcard rounded-2xl border border-[#ece5f5] shadow-sm p-5 flex flex-col">
+            <div class="aspect-square rounded-xl bg-[#f4f0fa] overflow-hidden mb-4">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+              {% else %}
+                <div class="w-full h-full flex items-center justify-center text-sm text-[#8b829b]">Image coming soon</div>
+              {% endif %}
+            </div>
+            <h3 class="font-semibold text-lg">{{ product.name }}</h3>
+            <p class="mt-1 text-llprimary font-semibold">£{{ product.price }}</p>
+            <p class="mt-3 text-sm text-[#645c74] leading-relaxed">{{ product.description }}</p>
+            <button class="mt-5 w-full px-4 py-2.5 rounded-xl bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
+              Add to cart
+            </button>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="certificates" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8">
+        <h2 class="text-3xl font-heading mb-3">Certificates</h2>
+        <p class="text-[#645c74]">Batch documentation and purity verification section. You can add files and links here once provided.</p>
+      </div>
+    </section>
+
+    <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8">
+        <h2 class="text-3xl font-heading mb-3">About</h2>
+        <p class="text-[#645c74]">LightLab is focused on clear presentation, trusted sourcing, and a smooth buying experience.</p>
+      </div>
+    </section>
+
+    <section id="faq" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <h2 class="text-3xl font-heading mb-4">FAQ</h2>
+      <div class="space-y-3">
+        <div class="bg-white border border-[#ece5f5] rounded-xl p-4">Do I need an account to buy? No, checkout is simple with no account required.</div>
+        <div class="bg-white border border-[#ece5f5] rounded-xl p-4">How are products supplied? As lyophilized powder for laboratory research use only.</div>
+      </div>
+    </section>
+
+    <section id="contact" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <h2 class="text-3xl font-heading mb-4">Contact</h2>
+      <form class="bg-white border border-[#ece5f5] rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input type="text" placeholder="Name" class="sm:col-span-1 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary">
+        <input type="email" placeholder="Email" class="sm:col-span-1 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary">
+        <textarea placeholder="Message" rows="5" class="sm:col-span-2 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary"></textarea>
+        <button type="button" class="sm:col-span-2 px-6 py-3 rounded-xl bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
+          Send Enquiry
+        </button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="border-t border-[#e8e0f2] mt-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 text-sm text-[#756d86]">
+      © LightLab. All rights reserved.
+    </div>
+  </footer>
+<script src="{% static 'js/site.js' %}" defer></script>
 </body>
 </html>
