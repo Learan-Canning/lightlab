@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic document setup -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LightLab</title>
 
+  <!-- Google fonts: heading + body -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+  <!-- Material Symbols font (currently loaded; optional if only using Lucide) -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,500,0,0"
+  />
+
+  <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind custom theme: brand colors and font aliases -->
   <script>
     tailwind.config = {
       theme: {
@@ -30,25 +41,41 @@
       }
     }
   </script>
+
+  <!-- Django static tag loader -->
   {% load static %}
+
+  <!-- Project custom stylesheet -->
   <link rel="stylesheet" href="{% static 'site.css' %}">
+
+  <!-- Favicon and app icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+  <link rel="icon" href="{% static 'favicon/favicon.ico' %}">
+  <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
 </head>
+
 <body class="bg-llbg text-lltext font-body antialiased">
+  <!-- Sticky top header -->
   <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-      <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
-        ☰
-      </button>
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-4">
 
-      <a href="#home" class="text-3xl font-heading leading-none">
-        Light<span class="text-llprimary">Lab</span>
-      </a>
+      <!-- Left header group: mobile menu button + logo -->
+      <div class="flex items-center gap-3">
+        <!-- Mobile hamburger button (shown on small screens only) -->
+        <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
 
-      <a href="#products" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
-        🛍️
-      </a>
+        <!-- Brand logo -->
+        <a href="#home" class="text-3xl font-heading leading-none">
+          Light<span class="text-llprimary">Lab</span>
+        </a>
+      </div>
 
-      <nav class="hidden md:flex gap-7 text-sm font-medium ml-8">
+      <!-- Desktop navigation links -->
+      <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
         <a href="#home" class="hover:text-llprimary">Home</a>
         <a href="#products" class="hover:text-llprimary">Shop</a>
         <a href="#certificates" class="hover:text-llprimary">Certificates</a>
@@ -56,84 +83,137 @@
         <a href="#faq" class="hover:text-llprimary">FAQ</a>
         <a href="#contact" class="hover:text-llprimary">Contact</a>
       </nav>
+
+      <!-- Right header group: quick shop/cart icon -->
+      <div class="flex justify-end">
+        <a href="#products" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        </a>
+      </div>
     </div>
 
-      <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
-          <a href="#home" class="hover:text-llprimary">Home</a>
-          <a href="#products" class="hover:text-llprimary">Shop</a>
-          <a href="#certificates" class="hover:text-llprimary">Certificates</a>
-          <a href="#about" class="hover:text-llprimary">About</a>
-          <a href="#faq" class="hover:text-llprimary">FAQ</a>
-          <a href="#contact" class="hover:text-llprimary">Contact</a>
-        </div>
-      </nav>
+    <!-- Mobile dropdown nav (toggled by site.js) -->
+    <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="#home" class="hover:text-llprimary">Home</a>
+        <a href="#products" class="hover:text-llprimary">Shop</a>
+        <a href="#certificates" class="hover:text-llprimary">Certificates</a>
+        <a href="#about" class="hover:text-llprimary">About</a>
+        <a href="#faq" class="hover:text-llprimary">FAQ</a>
+        <a href="#contact" class="hover:text-llprimary">Contact</a>
+      </div>
+    </nav>
   </header>
 
+  <!-- Main single-page content -->
   <main id="home">
+
+    <!-- Hero section -->
     <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-16 pb-12 text-center">
-      <p class="inline-block px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-wide">
+      <!-- Hero trust badge -->
+      <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-wide">
+        <i data-lucide="shield-check" class="w-4 h-4"></i>
         PREMIUM RESEARCH PRODUCTS
       </p>
+
+      <!-- Hero headline -->
       <h1 class="mt-6 text-5xl sm:text-6xl md:text-7xl font-heading leading-tight">
         Premium Research Products.
         <span class="block text-llprimary">Beautifully Presented.</span>
       </h1>
+
+      <!-- Hero supporting text -->
       <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-[#5f5670]">
         Discover a refined, modern research brand focused on quality, presentation, and trust.
       </p>
+
+      <!-- Hero call-to-action buttons -->
       <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
         <a href="#products" class="px-7 py-3 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">Shop Now</a>
         <a href="#certificates" class="px-7 py-3 rounded-full bg-white border border-[#e8e0f2] font-semibold hover:bg-llsoft transition">View Certificates</a>
       </div>
+
+      <!-- Trust chips -->
       <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm">
-      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Quality Assured</span>
-      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Fast Dispatch</span>
-      <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Batch Documented</span>
-</div>
+        <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Quality Assured</span>
+        <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Fast Dispatch</span>
+        <span class="px-4 py-2 rounded-full bg-white border border-[#e8e0f2] text-[#6f6780]">Certificate Verified</span>
+      </div>
     </section>
 
-     <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <!-- Feature cards section -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+        <!-- Feature card 1 -->
         <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
           <h3 class="font-heading text-2xl mb-2">Premium Presentation</h3>
           <p class="text-[#645c74]">Beautifully packaged products that reflect quality and care.</p>
         </article>
+
+        <!-- Feature card 2 -->
         <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
           <h3 class="font-heading text-2xl mb-2">Quality Focused</h3>
           <p class="text-[#645c74]">Every product is carefully sourced, tested, and documented.</p>
         </article>
+
+        <!-- Feature card 3 -->
         <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
-          <h3 class="font-heading text-2xl mb-2">Batch Documentation</h3>
-          <p class="text-[#645c74]">Full certificates of analysis available for every batch.</p>
+          <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="badge-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-heading text-2xl mb-2">Certificate Documentation</h3>
+          <p class="text-[#645c74]">Full certificates of analysis available for every product.</p>
         </article>
+
+        <!-- Feature card 4 -->
         <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="truck" class="w-5 h-5"></i>
+          </div>
           <h3 class="font-heading text-2xl mb-2">Fast Dispatch</h3>
           <p class="text-[#645c74]">Orders processed and dispatched swiftly with care.</p>
         </article>
       </div>
-      
     </section>
 
+    <!-- Products section -->
     <section id="products" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <!-- Products heading and product count -->
       <div class="flex items-end justify-between mb-6">
         <h2 class="text-3xl sm:text-4xl font-heading">Shop</h2>
         <p class="text-sm text-[#6f6780]">{{ products|length }} products</p>
       </div>
 
+      <!-- Product cards grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Loop through all products passed from Django view -->
         {% for product in products %}
           <article class="bg-llcard rounded-2xl border border-[#ece5f5] shadow-sm p-5 flex flex-col">
+
+            <!-- Product image wrapper -->
             <div class="aspect-square rounded-xl bg-[#f4f0fa] overflow-hidden mb-4">
               {% if product.image %}
+                <!-- Real product image -->
                 <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
               {% else %}
+                <!-- Fallback placeholder when image is missing -->
                 <div class="w-full h-full flex items-center justify-center text-sm text-[#8b829b]">Image coming soon</div>
               {% endif %}
             </div>
+
+            <!-- Product text info -->
             <h3 class="font-semibold text-lg">{{ product.name }}</h3>
             <p class="mt-1 text-llprimary font-semibold">£{{ product.price }}</p>
             <p class="mt-3 text-sm text-[#645c74] leading-relaxed">{{ product.description }}</p>
+
+            <!-- Add-to-cart button (visual for now) -->
             <button class="mt-5 w-full px-4 py-2.5 rounded-xl bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
               Add to cart
             </button>
@@ -142,13 +222,16 @@
       </div>
     </section>
 
+    <!-- Certificates section -->
     <section id="certificates" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8">
         <h2 class="text-3xl font-heading mb-3">Certificates</h2>
-        <p class="text-[#645c74]">Batch documentation and purity verification section. You can add files and links here once provided.</p>
+        <!-- Placeholder text until real certificate links/files are added -->
+        <p class="text-[#645c74]">Certificate and purity verification section.</p>
       </div>
     </section>
 
+    <!-- About section -->
     <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8">
         <h2 class="text-3xl font-heading mb-3">About</h2>
@@ -156,6 +239,7 @@
       </div>
     </section>
 
+    <!-- FAQ section -->
     <section id="faq" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <h2 class="text-3xl font-heading mb-4">FAQ</h2>
       <div class="space-y-3">
@@ -164,12 +248,22 @@
       </div>
     </section>
 
+    <!-- Contact section -->
     <section id="contact" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <h2 class="text-3xl font-heading mb-4">Contact</h2>
+
+      <!-- Contact form -->
       <form class="bg-white border border-[#ece5f5] rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- Name field -->
         <input type="text" placeholder="Name" class="sm:col-span-1 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary">
+
+        <!-- Email field -->
         <input type="email" placeholder="Email" class="sm:col-span-1 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary">
+
+        <!-- Message field -->
         <textarea placeholder="Message" rows="5" class="sm:col-span-2 p-3 rounded-xl border border-[#e7deef] focus:outline-none focus:ring-2 focus:ring-llprimary"></textarea>
+
+        <!-- Send button -->
         <button type="button" class="sm:col-span-2 px-6 py-3 rounded-xl bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
           Send Enquiry
         </button>
@@ -177,11 +271,22 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="border-t border-[#e8e0f2] mt-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 text-sm text-[#756d86]">
       © LightLab. All rights reserved.
     </div>
   </footer>
-<script src="{% static 'js/site.js' %}" defer></script>
+
+  <!-- Local JS: mobile menu behaviour -->
+  <script src="{% static 'js/site.js' %}" defer></script>
+
+  <!-- Lucide icon library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Initialize Lucide icons -->
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>

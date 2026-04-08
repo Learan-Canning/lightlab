@@ -19,10 +19,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+# Project-level routes.
 urlpatterns = [
+    # Django admin dashboard.
     path("admin/", admin.site.urls),
+
+    # Public storefront routes.
     path("", include("shop.urls")),
 ]
 
+# Serve uploaded media files during local development.
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

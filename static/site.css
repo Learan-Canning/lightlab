@@ -1,8 +1,0 @@
-html {
-  scroll-behavior: smooth;
-}
-
-:focus-visible {
-  outline: 2px solid #a987d8;
-  outline-offset: 2px;
-}

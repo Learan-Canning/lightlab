@@ -1,0 +1,21 @@
+/* Smooth anchor scrolling for one-page navigation. */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Accessible keyboard focus outline across interactive elements. */
+:focus-visible {
+  outline: 2px solid #a987d8;
+  outline-offset: 2px;
+}
+
+/* Material Symbols tuning (if these icons are used). */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+  line-height: 1;
+}
+
+/* Slightly thicker default stroke for Lucide SVG icons. */
+[data-lucide] {
+  stroke-width: 1.75;
+}

@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local app for products and homepage.
     'shop',
 ]
 
@@ -55,6 +57,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+
+        # Global templates folder (for home.html and shared templates).
         'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -115,7 +119,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
+# URL prefix for collected static files.
 STATIC_URL = "static/"
+
+# Where local static assets are read from in development.
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# URL and disk path for uploaded media (product images).
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
