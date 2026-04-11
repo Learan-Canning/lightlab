@@ -1,19 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
-const menuBtn = document.getElementById("menuBtn");
-const mobileMenu = document.getElementById("mobileMenu");
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
 
+  // Mobile menu toggle
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      mobileMenu.classList.toggle("hidden");
+    });
 
+    mobileMenu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+      });
+    });
+  }
 
-if (!menuBtn || !mobileMenu) return;
+  // FAQ accordion toggle (single item open at a time)
+  const faqToggles = document.querySelectorAll(".faq-toggle");
 
-menuBtn.addEventListener("click", (e) => {
-e.preventDefault();
-mobileMenu.classList.toggle("hidden");
-});
+  faqToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const answer = toggle.nextElementSibling;
+      const arrow = toggle.querySelector("i");
+      const isExpanded = toggle.getAttribute("aria-expanded") === "true";
 
-mobileMenu.querySelectorAll("a").forEach((link) => {
-link.addEventListener("click", () => {
-mobileMenu.classList.add("hidden");
-});
-});
+      faqToggles.forEach((otherToggle) => {
+        if (otherToggle !== toggle) {
+          otherToggle.setAttribute("aria-expanded", "false");
+          otherToggle.nextElementSibling.classList.add("hidden");
+          otherToggle.querySelector("i").style.transform = "rotate(0deg)";
+        }
+      });
+
+      toggle.setAttribute("aria-expanded", String(!isExpanded));
+      answer.classList.toggle("hidden");
+      arrow.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
+    });
+  });
 });
