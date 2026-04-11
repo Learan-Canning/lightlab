@@ -16,3 +16,36 @@ def home(request):
             "total_products": total_products,
         },
     )
+
+# Full shop page view.
+def shop(request):
+    products = Product.objects.filter(is_active=True)
+    return render(
+        request,
+        "shop.html",
+        {
+            "products": products,
+        },
+    )
+
+
+def certificates(request):
+    return render(request, "certificates.html")
+
+
+
+
+def about(request):
+    return render(request, "about.html")
+
+
+
+def faq(request):
+    return render(request, "faq.html")
+
+
+
+
+def contact(request):
+    return render(request, "contact.html")
+

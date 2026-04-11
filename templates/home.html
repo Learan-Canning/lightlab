@@ -77,11 +77,11 @@
       <!-- Desktop navigation links -->
       <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
         <a href="#home" class="hover:text-llprimary">Home</a>
-        <a href="#products" class="hover:text-llprimary">Shop</a>
-        <a href="#certificates" class="hover:text-llprimary">Certificates</a>
-        <a href="#about" class="hover:text-llprimary">About</a>
-        <a href="#faq" class="hover:text-llprimary">FAQ</a>
-        <a href="#contact" class="hover:text-llprimary">Contact</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
       </nav>
 
       <!-- Right header group: quick shop/cart icon -->
@@ -285,25 +285,38 @@
       </section>
 
     <!-- About section -->
-      <section id="about" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-    <!-- Left content -->
-        <div>
-          <p class="text-xs font-semibold text-llprimary tracking-widest uppercase mb-4">About LightLab</p>
-          <h2 class="text-5xl sm:text-6xl font-heading leading-tight mb-6">A New Standard in Research Products</h2>
-          <p class="text-base text-[#645c74] leading-relaxed mb-4">LightLab was founded with a simple vision: to bring elegance, transparency, and trust to the research product industry. We believe that quality products deserve quality presentation.</p>
-          <p class="text-base text-[#645c74] leading-relaxed mb-8">Every product we curate is carefully selected, independently documented, and beautifully packaged. We are committed to setting a new standard in how research products are sourced, presented, and delivered.</p>
-          <a href="#" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">Our Story <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
-        </div>
-    
-        <!-- Right side (decorative stats) -->
-        <div class="relative">
-          <div class="absolute top-0 right-0 bg-white border border-[#ece5f5] rounded-2xl p-6 shadow-sm">
-            <p class="text-llprimary text-4xl font-heading">100%</p>
-            <p class="text-sm text-[#645c74] mt-2">Quality documented & batch tested</p>
-          </div>
-        </div>
+      <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6 lg:gap-8 items-center">
+
+    <!-- Left: larger circular logo -->
+    <div class="flex justify-center lg:justify-end">
+      <div class="w-72 h-72 sm:w-80 sm:h-80 lg:w-[24rem] lg:h-[24rem] rounded-full border-[5px] border-llprimary bg-white shadow-md overflow-hidden">
+        <img
+          src="{% static 'img/lightlablogo.jpg' %}"
+          alt="LightLab logo"
+          class="w-full h-full object-cover scale-110"
+        >
       </div>
+    </div>
+
+    <!-- Right: larger about content -->
+    <div>
+      <p class="text-sm font-semibold text-llprimary tracking-widest uppercase mb-4">About LightLab</p>
+      <h2 class="text-5xl sm:text-6xl font-heading leading-tight mb-6">A New Standard in Research Products</h2>
+      <p class="text-lg text-[#645c74] leading-relaxed mb-5">
+        LightLab was founded with a simple vision: to bring elegance, transparency, and trust to the research product industry.
+        We believe that quality products deserve quality presentation.
+      </p>
+      <p class="text-lg text-[#645c74] leading-relaxed mb-8">
+        Every product we curate is carefully selected, independently documented, and beautifully packaged.
+        We are committed to setting a new standard in how research products are sourced, presented, and delivered.
+      </p>
+      <a href="/about/" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
+        Our Story <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+  </div>
     </section>
 
         <!-- FAQ section -->
