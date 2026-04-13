@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8",
+            llsoft: "#efe8f8",
+            llcard: "#ffffff"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+
+<body class="bg-llbg text-lltext font-body antialiased">
+
+  <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <a href="/" class="text-3xl font-heading leading-none">Light<span class="text-llprimary">Lab</span></a>
+      </div>
+
+      <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="text-llprimary font-semibold">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </nav>
+
+      <div class="flex justify-end gap-3">
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Search products">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </a>
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+
+    <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="text-llprimary font-semibold">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+    <section class="text-center mb-16 sm:mb-20">
+      <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">Our Story</p>
+      <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">The LightLab Story</h1>
+      <p class="max-w-3xl mx-auto text-lg text-[#645c74]">
+        Born from a desire to elevate the research product experience, LightLab is where
+        premium quality meets beautiful design.
+      </p>
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-center mb-16 sm:mb-20">
+      <div class="flex items-center justify-center">
+        <img
+            src="{% static 'img/lightlablogo.jpg' %}"
+            alt="LightLab logo"
+            class="w-64 sm:w-72 md:w-80 h-auto object-contain rounded-full border-2 border-llprimary ring-1 ring-[#c7afe8]/50 shadow-[0_0_56px_rgba(169,135,216,0.7)]"
+        >
+      </div>
+
+      <div>
+        <h2 class="font-heading text-5xl mb-6">Why We Exist</h2>
+        <p class="text-lg text-[#645c74] leading-relaxed mb-5">
+          LightLab was created because we saw an opportunity to do things differently. The
+          research product space needed a brand that cared as much about presentation, trust,
+          and customer experience as it did about product quality.
+        </p>
+        <p class="text-lg text-[#645c74] leading-relaxed mb-5">
+          We are not just a supplier, we are curators. Every product in our collection has been
+          carefully selected, independently tested, and beautifully presented. We believe that
+          when you invest in quality, you should feel that quality in every interaction.
+        </p>
+        <p class="text-lg text-[#645c74] leading-relaxed">
+          From our elegant packaging to our comprehensive certificates of analysis, every detail
+          has been considered with you in mind. LightLab is more than a brand, it is a new standard.
+        </p>
+      </div>
+    </section>
+
+    <section class="mb-16 sm:mb-20">
+      <div class="text-center mb-10">
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-2">What Drives Us</p>
+        <h2 class="text-5xl font-heading">Our Values</h2>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-11 w-11 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-heading text-3xl mb-3">Passion for Quality</h3>
+          <p class="text-sm text-[#645c74]">Every product is selected with intention and care, reflecting our commitment to excellence.</p>
+        </article>
+
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-11 w-11 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="eye" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-heading text-3xl mb-3">Full Transparency</h3>
+          <p class="text-sm text-[#645c74]">We believe you deserve to know exactly what you are receiving. Every batch is documented.</p>
+        </article>
+
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-11 w-11 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-heading text-3xl mb-3">Beautiful Presentation</h3>
+          <p class="text-sm text-[#645c74]">We believe quality products deserve quality presentation. It is in every detail.</p>
+        </article>
+
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center">
+          <div class="mx-auto mb-4 h-11 w-11 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="font-heading text-3xl mb-3">Trust First</h3>
+          <p class="text-sm text-[#645c74]">Building trust through consistency, documentation, and honest communication.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="py-10 sm:py-14 text-center">
+      <h2 class="font-heading text-5xl mb-4">Ready to Experience the Difference?</h2>
+      <p class="text-lg text-[#645c74] mb-8">Explore our curated collection of premium research products.</p>
+      <a href="/shop/" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
+        Shop Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
+      </a>
+    </section>
+
+  </main>
+
+  <script src="{% static 'js/site.js' %}" defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

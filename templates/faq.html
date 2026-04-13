@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ - LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8",
+            llsoft: "#efe8f8",
+            llcard: "#ffffff"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+
+<body class="bg-llbg text-lltext font-body antialiased">
+
+  <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <a href="/" class="text-3xl font-heading leading-none">Light<span class="text-llprimary">Lab</span></a>
+      </div>
+
+      <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="text-llprimary font-semibold">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </nav>
+
+      <div class="flex justify-end gap-3">
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Search products">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </a>
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+
+    <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="text-llprimary font-semibold">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+    <section class="text-center mb-16 sm:mb-20">
+      <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">Help Centre</p>
+      <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">Frequently Asked Questions</h1>
+      <p class="max-w-3xl mx-auto text-lg text-[#645c74]">
+        Find answers to common questions about our products and services.
+      </p>
+    </section>
+
+    <section class="space-y-10">
+
+      <div>
+        <h2 class="font-heading text-4xl mb-4">Ordering</h2>
+        <div class="space-y-3">
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">How do I place an order?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Place your order directly through our website by adding products to your basket and completing checkout. Once payment is confirmed, you will receive an order confirmation by email.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">What payment methods do you accept?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              We accept secure online card payments through our checkout provider. Available payment options are shown at checkout before you complete your order.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">Can I modify or cancel my order?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              If your order has not been processed yet, we may be able to amend or cancel it. Contact us as soon as possible with your order number and request.
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-heading text-4xl mb-4">Shipping &amp; Delivery</h2>
+        <div class="space-y-3">
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">How long does shipping take?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Dispatch and delivery times depend on your location and selected shipping method. Estimated delivery windows are shown at checkout and in your confirmation email.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">Do you offer international shipping?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              International shipping availability depends on destination and local regulations. If your country is eligible, shipping options will appear during checkout.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">Is free shipping available?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Free shipping may be offered during promotions or above certain order values. Any active free-shipping threshold is shown at checkout.
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-heading text-4xl mb-4">Quality &amp; Documentation</h2>
+        <div class="space-y-3">
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">Do you provide certificates of analysis?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Yes. We provide certificates of analysis for applicable products to support transparency and batch-level verification.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">How do you ensure product quality?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              We work with trusted manufacturing standards and documented testing procedures. Products are selected and reviewed with consistency, traceability, and quality control in mind.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">What is a batch number?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              A batch number is a unique identifier assigned to a production run. It helps track product history, testing records, and associated documentation.
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-heading text-4xl mb-4">Storage &amp; Handling</h2>
+        <div class="space-y-3">
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">How should I store peptides?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Store products according to the guidance provided on the product page or label. In general, keep items sealed, dry, and away from heat and direct light.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">What is the shelf life of your products?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Shelf life varies by product type and storage conditions. Refer to product-specific guidance and documentation for the most accurate timeframe.
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="font-heading text-4xl mb-4">General Information</h2>
+        <div class="space-y-3">
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">Are your products for human consumption?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              No. Our products are sold strictly for laboratory and research purposes only and are not for human consumption.
+            </div>
+          </article>
+
+          <article class="bg-white border border-[#ece5f5] rounded-2xl">
+            <button class="faq-toggle w-full text-left px-5 py-4 flex items-center justify-between gap-4" aria-expanded="false">
+              <span class="font-medium">How can I contact you?</span>
+              <i data-lucide="chevron-down" class="w-5 h-5 text-[#8b829b] transition-transform"></i>
+            </button>
+            <div class="hidden px-5 pb-5 text-sm text-[#645c74] leading-relaxed">
+              Use the contact page on our website to reach support. Include your order number if relevant so we can assist you faster.
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="{% static 'js/site.js' %}" defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

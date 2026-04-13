@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8",
+            llsoft: "#efe8f8",
+            llcard: "#ffffff"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+
+<body class="bg-llbg text-lltext font-body antialiased">
+
+  <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <a href="/" class="text-3xl font-heading leading-none">Light<span class="text-llprimary">Lab</span></a>
+      </div>
+
+      <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="text-llprimary font-semibold">Contact</a>
+      </nav>
+
+      <div class="flex justify-end gap-3">
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Search products">
+          <i data-lucide="search" class="w-5 h-5"></i>
+        </a>
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+
+    <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="hover:text-llprimary">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="text-llprimary font-semibold">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+    <section class="text-center mb-16 sm:mb-20">
+      <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">Get In Touch</p>
+      <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">Contact Us</h1>
+      <p class="max-w-3xl mx-auto text-lg text-[#645c74]">
+        We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      </p>
+    </section>
+
+    <section class="max-w-2xl mx-auto">
+      <form class="bg-white border border-[#ece5f5] rounded-2xl p-8 sm:p-10 space-y-6" method="POST">
+        {% csrf_token %}
+        
+        <!-- Name Field -->
+        <div>
+          <label for="name" class="block text-sm font-semibold text-lltext mb-2">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            class="w-full px-5 py-3 rounded-lg border border-[#ece5f5] bg-white text-lltext placeholder-[#8b829b] focus:outline-none focus:ring-2 focus:ring-llprimary transition"
+            placeholder="Your full name"
+          />
+        </div>
+
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-semibold text-lltext mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full px-5 py-3 rounded-lg border border-[#ece5f5] bg-white text-lltext placeholder-[#8b829b] focus:outline-none focus:ring-2 focus:ring-llprimary transition"
+            placeholder="your.email@example.com"
+          />
+        </div>
+
+        <!-- Subject Field -->
+        <div>
+          <label for="subject" class="block text-sm font-semibold text-lltext mb-2">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            required
+            class="w-full px-5 py-3 rounded-lg border border-[#ece5f5] bg-white text-lltext placeholder-[#8b829b] focus:outline-none focus:ring-2 focus:ring-llprimary transition"
+            placeholder="What is this about?"
+          />
+        </div>
+
+        <!-- Message Field -->
+        <div>
+          <label for="message" class="block text-sm font-semibold text-lltext mb-2">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            required
+            rows="6"
+            class="w-full px-5 py-3 rounded-lg border border-[#ece5f5] bg-white text-lltext placeholder-[#8b829b] focus:outline-none focus:ring-2 focus:ring-llprimary transition resize-none"
+            placeholder="Tell us how we can help..."
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full px-8 py-4 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition duration-200"
+        >
+          Send Message
+        </button>
+
+        <p class="text-xs text-[#8b829b] text-center">
+          We'll get back to you within 24 hours.
+        </p>
+      </form>
+    </section>
+
+    <section class="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="text-center">
+        <div class="mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary mx-auto">
+          <i data-lucide="mail" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading text-2xl mb-2">Email</h3>
+        <p class="text-[#645c74]">hello@lightlab.com</p>
+      </article>
+
+      <article class="text-center">
+        <div class="mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary mx-auto">
+          <i data-lucide="phone" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading text-2xl mb-2">Phone</h3>
+        <p class="text-[#645c74]">+44 (0) 123 456 7890</p>
+      </article>
+
+      <article class="text-center">
+        <div class="mb-4 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary mx-auto">
+          <i data-lucide="map-pin" class="w-6 h-6"></i>
+        </div>
+        <h3 class="font-heading text-2xl mb-2">Address</h3>
+        <p class="text-[#645c74]">London, United Kingdom</p>
+      </article>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-[#e8e0f2] mt-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 text-sm text-[#756d86]">
+      © LightLab. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="{% static 'js/site.js' %}" defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
