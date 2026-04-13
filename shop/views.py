@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Product
+from django.core.mail import send_mail
+from django.contrib import messages
 
 
 # Homepage view: loads products and renders the one-page storefront.
@@ -105,5 +107,31 @@ def faq(request):
 
 
 def contact(request):
-    return render(request, "contact.html")
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Validation
+        if not all([name, email, subject, message]):
+            messages.error(request, 'Please fill in all fields.')
+            return redirect('contact')
+
+        # Send email
+        try:
+            send_mail(
+                subject=f'New Contact Form: {subject}',
+                message=f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}',
+                from_email=email,
+                recipient_list=['hello@lightlab.com'],
+                fail_silently=False,
+            )
+            messages.success(request, 'Your message has been sent successfully!')
+            return redirect('contact')
+        except Exception as e:
+            messages.error(request, 'An error occurred. Please try again.')
+            return redirect('contact')
+
+    return render(request, 'contact.html')
 

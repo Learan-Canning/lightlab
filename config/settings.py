@@ -128,3 +128,14 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # URL and disk path for uploaded media (product images).
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Email configuration (for local testing with console backend)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# For production, you'd use:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # or your email provider
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your-email@gmail.com'
+# EMAIL_HOST_PASSWORD = 'your-app-password'
