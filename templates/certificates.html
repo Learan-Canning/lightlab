@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificates - LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8",
+            llsoft: "#efe8f8",
+            llcard: "#ffffff"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+<body class="bg-llbg text-lltext font-body antialiased">
+
+  <header class="sticky top-0 z-50 backdrop-blur bg-llbg/90 border-b border-[#e8e0f2]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-10 py-4 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+
+      <!-- Left header group: mobile menu button + logo -->
+      <div class="flex items-center gap-3">
+        <button id="menuBtn" class="md:hidden p-2 rounded-lg border border-[#e8e0f2]" aria-label="Open menu">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+
+        <a href="/" class="text-3xl font-heading leading-none">
+          Light<span class="text-llprimary">Lab</span>
+        </a>
+      </div>
+
+      <!-- Desktop navigation links -->
+      <nav class="hidden md:flex items-center justify-center gap-8 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="text-llprimary font-semibold">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </nav>
+
+      <!-- Right header group -->
+      <div class="flex justify-end">
+        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Mobile dropdown nav -->
+    <nav id="mobileMenu" class="md:hidden border-t border-[#e8e0f2] bg-llbg hidden">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="/" class="hover:text-llprimary">Home</a>
+        <a href="/shop/" class="hover:text-llprimary">Shop</a>
+        <a href="/certificates/" class="text-llprimary font-semibold">Certificates</a>
+        <a href="/about/" class="hover:text-llprimary">About</a>
+        <a href="/faq/" class="hover:text-llprimary">FAQ</a>
+        <a href="/contact/" class="hover:text-llprimary">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+    <div class="text-center mb-12">
+      <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">
+        Quality and Trust
+      </p>
+      <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">
+        Certificates and Documentation
+      </h1>
+      <p class="text-base sm:text-lg text-[#645c74] max-w-2xl mx-auto">
+        Transparency is at our core. Every product batch is independently tested and documented.
+        Below you'll find our certificates of analysis.
+      </p>
+    </div>
+
+    <section class="mb-14">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-heading text-3xl mb-3">Independently Tested</h3>
+            <p class="text-sm text-[#645c74]">All products undergo third-party testing for quality assurance.</p>
+            </article>
+
+            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+                <i data-lucide="file-check" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-heading text-3xl mb-3">Full Documentation</h3>
+            <p class="text-sm text-[#645c74]">Certificates of analysis available for every batch we supply.</p>
+            </article>
+
+            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
+                <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-heading text-3xl mb-3">Regularly Updated</h3>
+            <p class="text-sm text-[#645c74]">New certificates added with each batch to ensure transparency.</p>
+            </article>
+        </div>
+    </section>
+
+    <div class="space-y-4">
+      {% for cert in certificates %}
+        <article class="bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
+          <h3 class="font-heading text-2xl mb-2">{{ cert.title }}</h3>
+          <div class="flex flex-wrap items-center gap-3 text-sm text-[#645c74]">
+            <span class="font-semibold text-lltext">{{ cert.product }}</span>
+            <span class="px-3 py-1 rounded-full bg-[#f5f2fb] border border-[#e8e0f2]">Batch: {{ cert.batch }}</span>
+            <span class="px-3 py-1 rounded-full bg-[#e7f8ef] text-[#217a4b] font-semibold">{{ cert.purity }}% Purity</span>
+            <span>Tested: {{ cert.tested }}</span>
+          </div>
+        </article>
+      {% empty %}
+        <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center text-[#645c74]">
+          No certificates available yet.
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+    <script src="{% static 'js/site.js' %}" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+    lucide.createIcons();
+    </script>
+</body>
+</html>
