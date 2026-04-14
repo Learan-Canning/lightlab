@@ -135,3 +135,83 @@ def contact(request):
 
     return render(request, 'contact.html')
 
+def add_to_cart(request):
+    """
+    Handles adding a product to the session-based cart.
+    Called when customer clicks 'Add to Cart' button.
+    """
+    if request.method == 'POST':
+         # Get the product ID from the form
+        product_id = request.POST.get('product_id')
+        # Get quantity (default to 1 if not provided)
+        quantity = int(request.POST.get('quantity', 1))
+        
+        # Initialize cart in session if it doesn't exist yet
+        # Cart format: {'product_id': quantity, 'product_id': quantity, ...}
+        if 'cart' not in request.session:
+            request.session['cart'] = {}
+        
+        cart = request.session['cart']
+        
+        # If product already in cart, add to quantity. Otherwise, add it.
+        if str(product_id) in cart:
+            cart[str(product_id)] += quantity
+        else:
+            cart[str(product_id)] = quantity
+        
+        # Save the session (required for changes to take effect)
+        request.session.modified = True
+        
+        # Show success message to user
+        messages.success(request, 'Product added to cart!')
+        
+        # Redirect back to where they came from (shop or home)
+        return redirect(request.POST.get('next', 'shop'))
+    
+    # If not POST request, redirect to shop
+    return redirect('shop')
+
+def cart(request):
+    """
+    Display the shopping cart page.
+    Shows all items in session cart with prices, quantities, and totals.
+    """
+    # Get cart from session (empty dict if no cart yet)
+    cart_data = request.session.get('cart', {})
+    
+    # Fetch product details for items in cart
+    cart_items = []
+    subtotal = 0
+    
+    for product_id, quantity in cart_data.items():
+        try:
+            product = Product.objects.get(id=int(product_id))
+            item_total = float(product.price) * quantity
+            subtotal += item_total
+            
+            cart_items.append({
+                'product': product,
+                'quantity': quantity,
+                'item_total': item_total,
+            })
+        except Product.DoesNotExist:
+            # Remove product if it no longer exists
+            del cart_data[product_id]
+    
+    # Calculate tax (10%) and total
+    tax = subtotal * 0.10
+    total = subtotal + tax
+    
+    # Save session if we removed any deleted products
+    request.session.modified = True
+    
+    return render(request, 'cart.html', {
+        'cart_items': cart_items,
+        'subtotal': subtotal,
+        'tax': tax,
+        'total': total,
+        'cart_count': len(cart_items),
+    })
+
+
+
