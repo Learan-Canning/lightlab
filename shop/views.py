@@ -213,5 +213,42 @@ def cart(request):
         'cart_count': len(cart_items),
     })
 
+def update_cart(request):
+    if request.method == 'POST':
+        product_id = str(request.POST.get('product_id', ''))
+        quantity_raw = request.POST.get('quantity', '1')
+
+        try:
+            quantity = int(quantity_raw)
+        except ValueError:
+            quantity = 1
+
+        if quantity < 1:
+            quantity = 1
+
+        cart_data = request.session.get('cart', {})
+
+        if product_id in cart_data:
+            cart_data[product_id] = quantity
+            request.session['cart'] = cart_data
+            request.session.modified = True
+            messages.success(request, 'Cart quantity updated.')
+
+    return redirect('cart')
+
+
+def remove_from_cart(request):
+    if request.method == 'POST':
+        product_id = str(request.POST.get('product_id', ''))
+        cart_data = request.session.get('cart', {})
+
+        if product_id in cart_data:
+            del cart_data[product_id]
+            request.session['cart'] = cart_data
+            request.session.modified = True
+            messages.success(request, 'Item removed from cart.')
+
+    return redirect('cart')
+
 
 

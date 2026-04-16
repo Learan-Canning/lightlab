@@ -52,7 +52,7 @@
         <a href="/contact" class="hover:text-llprimary">Contact</a>
       </nav>
       <div class="flex justify-end">
-        <a href="/cart" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to cart">
+        <a href="/cart/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to cart">
           <i data-lucide="shopping-bag" class="w-5 h-5"></i>
         </a>
       </div>
@@ -140,9 +140,16 @@
             <!-- Price & Add to Cart -->
             <div class="flex items-center justify-between">
               <p class="text-llprimary text-base font-semibold">£{{ product.price }}</p>
-              <button class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Add to cart">
-                <i data-lucide="shopping-bag" class="w-5 h-5 text-llprimary"></i>
-              </button>
+
+              <form method="POST" action="/add-to-cart/">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <input type="hidden" name="next" value="/shop/">
+                <button type="submit" class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Add to cart">
+                  <i data-lucide="shopping-bag" class="w-5 h-5 text-llprimary"></i>
+                </button>
+              </form>
             </div>
           </div>
         </article>

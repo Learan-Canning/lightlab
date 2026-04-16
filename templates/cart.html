@@ -65,6 +65,39 @@
                 <p class="text-xl font-semibold text-llprimary">£{{ item.item_total|floatformat:2 }}</p>
               </div>
             </div>
+
+            <div class="mt-3 flex flex-wrap items-center gap-3">
+              <form method="POST" action="/cart/update/" class="flex items-center gap-2">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <label for="qty-{{ item.product.id }}" class="text-sm text-[#645c74]">Qty</label>
+                <input
+                  id="qty-{{ item.product.id }}"
+                  name="quantity"
+                  type="number"
+                  min="1"
+                  value="{{ item.quantity }}"
+                  class="w-20 px-2 py-1 rounded-lg border border-[#dfd4ef] text-sm"
+                >
+                <button
+                  type="submit"
+                  class="px-3 py-1.5 rounded-lg border border-[#dfd4ef] text-sm font-semibold text-[#5a506c] hover:border-llprimary hover:text-llprimary transition"
+                >
+                  Update
+                </button>
+              </form>
+
+              <form method="POST" action="/cart/remove/">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <button
+                  type="submit"
+                  class="px-3 py-1.5 rounded-lg border border-[#f0d9de] text-sm font-semibold text-[#9b4a58] hover:bg-[#fff4f6] transition"
+                >
+                  Remove
+                </button>
+              </form>
+            </div>
           </article>
           {% endfor %}
         </div>
