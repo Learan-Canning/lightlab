@@ -1,23 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto py-12">
-  <h1 class="text-2xl font-bold">Order Confirmation</h1>
-  <p class="mt-4">Thank you. Your order reference is <strong>{{ order.reference }}</strong>.</p>
-  <p class="mt-2">Amount to pay: <strong>£{{ order.total_amount }}</strong></p>
+<section class="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
+  <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-[0.28em] uppercase">
+    Order Confirmed
+  </p>
 
-  <div class="mt-6 p-4 border rounded">
-    <h2 class="font-semibold">Bank transfer details</h2>
-    <p>Account name: {{ bank.name }}</p>
-    <p>Account number: {{ bank.number }}</p>
-    <p>Sort code: {{ bank.sort_code }}</p>
+  <h1 class="mt-6 text-5xl sm:text-6xl md:text-7xl font-heading leading-tight">
+    Thank You
+  </h1>
+
+  <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-[#645c74]">
+    Your order has been created successfully. Please use the reference below when making your bank transfer.
+  </p>
+</section>
+
+<section class="max-w-4xl mx-auto space-y-6">
+  <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-200">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
+      <h2 class="font-heading text-3xl sm:text-4xl">Payment Details</h2>
+      <p class="text-sm text-[#645c74]">
+        Order reference: <strong class="text-lltext">{{ order.reference }}</strong>
+      </p>
+    </div>
+
+    <p class="text-[#645c74]">
+      Amount to pay: <strong class="text-lltext">£{{ order.total_amount }}</strong>
+    </p>
+
+    <div class="mt-6 p-5 sm:p-6 rounded-xl bg-[#f9f6ff] border border-[#e8e0f2] hover:bg-[#f7f1ff] hover:border-[#dac9ef] transition duration-200">
+      <h3 class="font-semibold text-lltext mb-3">Bank transfer details</h3>
+      <div class="space-y-1 text-[#645c74]">
+        <p>Account name: <span class="text-lltext">{{ bank.name }}</span></p>
+        <p>Account number: <span class="text-lltext">{{ bank.number }}</span></p>
+        <p>Sort code: <span class="text-lltext">{{ bank.sort_code }}</span></p>
+      </div>
+    </div>
+  </article>
+
+  <article class="bg-llsoft border border-[#e8e0f2] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-[#d8c8ee] transition duration-200">
+    <p class="font-semibold text-lltext">Important payment reference</p>
+    <p class="mt-3 text-lg sm:text-xl tracking-wide text-lltext">
+      PAY USING REFERENCE: {{ order.reference }}
+    </p>
+  </article>
+
+  <div class="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+    <a href="/shop/" class="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition duration-200">
+      Continue Shopping
+    </a>
+    <a href="/cart/" class="inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-[#e8e0f2] text-lltext font-semibold hover:border-llprimary hover:text-llprimary transition duration-200">
+      View Cart
+    </a>
   </div>
 
-  <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400">
-    <p class="font-semibold">Important payment reference</p>
-    <p class="mt-2">PAY USING REFERENCE: {{ order.reference }}</p>
-  </div>
-
-  <p class="mt-6">After you make the transfer using the reference above we will process your order.</p>
-</div>
+  <p class="text-center text-[#645c74]">
+    After you make the transfer using the reference above, we will process your order.
+  </p>
+</section>
 {% endblock %}
