@@ -19,4 +19,7 @@ urlpatterns = [
     path("cart/", views.cart, name="cart"),
     path("cart/update/", views.update_cart, name="update_cart"),
     path("cart/remove/", views.remove_from_cart, name="remove_from_cart"),
+    path("checkout/create/", views.create_order, name="create_order"),
+    path("checkout/<str:reference>/", views.order_confirmation, name="order_confirmation"),
+    path("checkout/cancel/", views.checkout_cancel, name="checkout_cancel"),
 ]

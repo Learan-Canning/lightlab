@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Order, OrderItem, _generate_reference
 from django.core.mail import send_mail
 from django.contrib import messages
+from decimal import Decimal
+from django.conf import settings
+from django.db import transaction, IntegrityError
 
 
 # Homepage view: loads products and renders the one-page storefront.
@@ -212,6 +215,105 @@ def cart(request):
         'total': total,
         'cart_count': len(cart_items),
     })
+
+
+def create_order(request):
+    if request.method != "POST":
+        return redirect("cart")
+
+    email = request.POST.get("email", "").strip()
+    name = request.POST.get("name", "").strip()
+    if not email:
+        messages.error(request, "Email is required to complete checkout.")
+        return redirect("cart")
+
+    cart = request.session.get("cart", {})
+    if not cart:
+        messages.error(request, "Your cart is empty.")
+        return redirect("cart")
+
+    # Create order with retry to avoid rare reference collisions
+    order = None
+    for attempt in range(5):
+        reference = _generate_reference()
+        try:
+            with transaction.atomic():
+                order = Order.objects.create(reference=reference, email=email, name=name)
+            break
+        except IntegrityError:
+            order = None
+            if attempt == 4:
+                messages.error(request, "Could not create order. Please try again.")
+                return redirect("cart")
+
+    # Build items and totals
+    subtotal = Decimal("0.00")
+    for pid, qty in cart.items():
+        try:
+            product = Product.objects.get(pk=int(pid), is_active=True)
+        except Product.DoesNotExist:
+            continue
+        unit_price = product.price
+        quantity = int(qty)
+        line_total = Decimal(unit_price) * quantity
+        subtotal += line_total
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            unit_price=unit_price,
+            quantity=quantity,
+            line_total=line_total,
+        )
+
+    tax = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
+    total = (subtotal + tax).quantize(Decimal("0.01"))
+    order.total_amount = total
+    order.save()
+
+    # Clear cart
+    request.session['cart'] = {}
+    request.session.modified = True
+
+    # Send confirmation email with bank details and strict reference line
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None)
+    bank_lines = [
+        f"Account name: {settings.BANK_ACCOUNT_NAME}",
+        f"Account number: {settings.BANK_ACCOUNT_NUMBER}",
+        f"Sort code: {settings.BANK_SORT_CODE}",
+    ]
+    bank_text = "\n".join(bank_lines)
+    payment_reference_line = f"PAY USING REFERENCE: {order.reference}"
+
+    subject = f"LightLab order {order.reference} — Payment instructions"
+    message = (
+        f"Thank you for your order.\n\n"
+        f"Amount to pay: £{order.total_amount}\n\n"
+        f"{bank_text}\n\n"
+        f"{payment_reference_line}\n\n"
+        "Please use the reference above when making the bank transfer."
+    )
+    send_mail(subject, message, from_email, [order.email], fail_silently=False)
+
+    return redirect("order_confirmation", reference=order.reference)
+
+
+def order_confirmation(request, reference):
+    try:
+        order = Order.objects.get(reference=reference)
+    except Order.DoesNotExist:
+        messages.error(request, "Order not found.")
+        return redirect("shop")
+    bank = {
+        "name": settings.BANK_ACCOUNT_NAME,
+        "number": settings.BANK_ACCOUNT_NUMBER,
+        "sort_code": settings.BANK_SORT_CODE,
+    }
+    return render(request, "order_confirmation.html", {"order": order, "bank": bank})
+
+
+def checkout_cancel(request):
+    messages.info(request, "Checkout cancelled.")
+    return redirect('cart')
 
 def update_cart(request):
     if request.method == 'POST':

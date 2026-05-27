@@ -1,5 +1,5 @@
 from django.db import models
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from uuid import uuid4
 
 
@@ -24,7 +24,10 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-# Order model.
+  
+def _generate_reference():
+    return uuid4().hex[:12].upper()
+
 class Order(models.Model):
     STATUS_PENDING = "pending"
     STATUS_PAID = "paid"
@@ -45,10 +48,6 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.reference} — {self.email}"
 
-    def _generate_reference():
-        return uuid4().hex[:12].upper()
-
-# OrderItem model.
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
@@ -57,5 +56,8 @@ class OrderItem(models.Model):
     line_total = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
-        self.line_total = (self.unit_price or 0) * self.quantity
+        self.line_total = (Decimal(self.unit_price) * Decimal(self.quantity)).quantize(Decimal("0.01"), ROUND_HALF_UP)
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product.name} x{self.quantity} — {self.order.reference}"

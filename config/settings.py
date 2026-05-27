@@ -139,3 +139,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'your-email@gmail.com'
 # EMAIL_HOST_PASSWORD = 'your-app-password'
+
+# Bank transfer details (use environment variables in production)
+BANK_ACCOUNT_NAME = "Mr Jordan Houghton"
+BANK_ACCOUNT_NUMBER = "90801208"
+BANK_SORT_CODE = "20-26-24"
+
+# Email sender for order confirmations
+DEFAULT_FROM_EMAIL = "no-reply@lightlab.com"
