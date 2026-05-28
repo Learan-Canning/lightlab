@@ -18,7 +18,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     # Columns shown in the order list.
-    list_display = ("reference", "email", "total_amount", "status", "created_at")
+    list_display = ("reference", "email", "total_amount", "status", "town_or_city", "postcode", "created_at")
 
     # Enables search by order reference or email.
     search_fields = ("reference", "email")
@@ -28,6 +28,17 @@ class OrderAdmin(admin.ModelAdmin):
 
     # Fields that are read-only.
     readonly_fields = ("reference", "total_amount", "created_at")
+
+    # Make address fields visible in the admin detail view
+    fieldsets = (
+        (None, {
+            'fields': ('reference', 'email', 'name', 'total_amount', 'status', 'created_at')
+        }),
+        ('Shipping address', {
+            'classes': ('collapse',),
+            'fields': ('address_line_1', 'address_line_2', 'town_or_city', 'county', 'postcode', 'country'),
+        }),
+    )
 
 
 @admin.register(OrderItem)

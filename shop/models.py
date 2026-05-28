@@ -41,6 +41,14 @@ class Order(models.Model):
     reference = models.CharField(max_length=24, unique=True, default=_generate_reference, db_index=True)
     email = models.EmailField()
     name = models.CharField(max_length=200, blank=True)
+
+    address_line_1 = models.CharField(max_length=255)
+    address_line_2 = models.CharField(max_length=255, blank=True)
+    town_or_city = models.CharField(max_length=100)
+    county = models.CharField(max_length=100, blank=True)
+    postcode = models.CharField(max_length=20)
+    country = models.CharField(max_length=100, default="United Kingdom")
+
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal("0.00"))
     status = models.CharField(max_length=12, choices=STATUS_CHOICES, default=STATUS_PENDING)
     created_at = models.DateTimeField(auto_now_add=True)

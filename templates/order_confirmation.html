@@ -28,6 +28,18 @@
       Amount to pay: <strong class="text-lltext">£{{ order.total_amount }}</strong>
     </p>
 
+    <div class="mt-6 p-5 sm:p-6 rounded-xl bg-white border border-[#ece5f5]">
+      <h3 class="font-semibold text-lltext mb-2">Shipping address</h3>
+      <div class="text-[#645c74]">
+        <p>{{ order.name }}</p>
+        <p>{{ order.address_line_1 }}</p>
+        {% if order.address_line_2 %}<p>{{ order.address_line_2 }}</p>{% endif %}
+        <p>{{ order.town_or_city }}{% if order.county %}, {{ order.county }}{% endif %}</p>
+        <p>{{ order.postcode }}</p>
+        <p>{{ order.country }}</p>
+      </div>
+    </div>
+
     <div class="mt-6 p-5 sm:p-6 rounded-xl bg-[#f9f6ff] border border-[#e8e0f2] hover:bg-[#f7f1ff] hover:border-[#dac9ef] transition duration-200">
       <h3 class="font-semibold text-lltext mb-3">Bank transfer details</h3>
       <div class="space-y-1 text-[#645c74]">

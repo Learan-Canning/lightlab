@@ -125,8 +125,28 @@
             {% csrf_token %}
             <label class="text-sm text-[#645c74]">Email (required)</label>
             <input name="email" required type="email" placeholder="you@example.com" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
             <label class="text-sm text-[#645c74] mt-3">Name (optional)</label>
             <input name="name" type="text" placeholder="Your name" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74]">Address line 1</label>
+            <input name="address_line_1" required type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74] mt-3">Address line 2</label>
+            <input name="address_line_2" type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74] mt-3">Town / City</label>
+            <input name="town_or_city" required type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74] mt-3">County</label>
+            <input name="county" type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74] mt-3">Postcode</label>
+            <input name="postcode" required type="text" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
+            <label class="text-sm text-[#645c74] mt-3">Country</label>
+            <input name="country" required type="text" value="United Kingdom" class="mt-2 w-full px-4 py-3 rounded-lg border border-[#dfd4ef]">
+
             <button type="submit" class="mt-4 w-full rounded-full bg-llprimary text-white py-3 font-semibold hover:bg-llprimaryDark transition">
               Proceed to Checkout
             </button>

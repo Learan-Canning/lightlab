@@ -223,8 +223,20 @@ def create_order(request):
 
     email = request.POST.get("email", "").strip()
     name = request.POST.get("name", "").strip()
+    # Address fields
+    address_line_1 = request.POST.get("address_line_1", "").strip()
+    address_line_2 = request.POST.get("address_line_2", "").strip()
+    town_or_city = request.POST.get("town_or_city", "").strip()
+    county = request.POST.get("county", "").strip()
+    postcode = request.POST.get("postcode", "").strip()
+    country = request.POST.get("country", "United Kingdom").strip()
+
+    # Basic validation
     if not email:
         messages.error(request, "Email is required to complete checkout.")
+        return redirect("cart")
+    if not address_line_1 or not town_or_city or not postcode:
+        messages.error(request, "Please provide a full postal address (street, town/city and postcode).")
         return redirect("cart")
 
     cart = request.session.get("cart", {})
@@ -238,7 +250,17 @@ def create_order(request):
         reference = _generate_reference()
         try:
             with transaction.atomic():
-                order = Order.objects.create(reference=reference, email=email, name=name)
+                order = Order.objects.create(
+                    reference=reference,
+                    email=email,
+                    name=name,
+                    address_line_1=address_line_1,
+                    address_line_2=address_line_2,
+                    town_or_city=town_or_city,
+                    county=county,
+                    postcode=postcode,
+                    country=country,
+                )
             break
         except IntegrityError:
             order = None
