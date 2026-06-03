@@ -124,10 +124,10 @@ def contact(request):
         # Send email
         try:
             send_mail(
-                subject=f'New Contact Form: {subject}',
-                message=f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}',
-                from_email=email,
-                recipient_list=['hello@lightlab.com'],
+                subject=f"New Contact Form: {subject}",
+                message=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}",
+                from_email=settings.DEFAULT_FROM_EMAIL,   # safer than using visitor email
+                recipient_list=[settings.CONTACT_FORM_TO_EMAIL],
                 fail_silently=False,
             )
             messages.success(request, 'Your message has been sent successfully!')

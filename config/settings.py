@@ -132,7 +132,13 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Email configuration (for local testing with console backend)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'lightlabenquiries@gmail.com'
+EMAIL_HOST_PASSWORD = 'YOUR_GMAIL_APP_PASSWORD'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # For production, you'd use:
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -149,3 +155,6 @@ BANK_SORT_CODE = "20-26-24"
 
 # Email sender for order confirmations
 DEFAULT_FROM_EMAIL = "no-reply@lightlab.com"
+
+# Contact form email address
+CONTACT_FORM_TO_EMAIL = "lightlabenquiries@gmail.com"
