@@ -59,8 +59,7 @@
         <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Search products">
           <i data-lucide="search" class="w-5 h-5"></i>
         </a>
-        <a href="/shop/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to shop">
-          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        <a href="/cart/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to cart"> <i data-lucide="shopping-bag" class="w-5 h-5"></i>
         </a>
       </div>
     </div>
@@ -78,6 +77,16 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+
+    {% if messages %}
+    <section class="max-w-2xl mx-auto mb-8 space-y-3">
+      {% for message in messages %}
+      <div class="rounded-xl border px-4 py-3 text-sm {% if message.tags == 'success' %}bg-[#ebf8ef] border-[#c6ebd3] text-[#1f6a3f]{% else %}bg-[#fff3f4] border-[#ffd6da] text-[#8a2b3b]{% endif %}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </section>
+    {% endif %}
 
     <section class="text-center mb-16 sm:mb-20">
       <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">Get In Touch</p>

@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +23,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)w1a&z-@2*v=9c8*vx&ecbm*31l2#^vxh6=mu&1u1i-lknm2qy'
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-)w1a&z-@2*v=9c8*vx&ecbm*31l2#^vxh6=mu&1u1i-lknm2qy",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+    if host.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
 
 
 # Application definition
@@ -40,10 +56,13 @@ INSTALLED_APPS = [
 
     # Local app for products and homepage.
     'shop',
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,6 +103,14 @@ DATABASES = {
     }
 }
 
+database_url = os.environ.get("DATABASE_URL")
+if database_url:
+    DATABASES["default"] = dj_database_url.config(
+        default=database_url,
+        conn_max_age=600,
+        ssl_require=True,
+    )
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -123,6 +150,8 @@ USE_TZ = True
 
 # URL prefix for collected static files.
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Where local static assets are read from in development.
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -132,12 +161,12 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Email configuration (for local testing with console backend)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'lightlabenquiries@gmail.com'
-EMAIL_HOST_PASSWORD = 'YOUR_GMAIL_APP_PASSWORD'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 587))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "True").lower() in {"1", "true", "yes", "on"}
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "lightlabenquiries@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "YOUR_GMAIL_APP_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # For production, you'd use:
@@ -149,12 +178,27 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # EMAIL_HOST_PASSWORD = 'your-app-password'
 
 # Bank transfer details (use environment variables in production)
-BANK_ACCOUNT_NAME = "Mr Jordan Houghton"
-BANK_ACCOUNT_NUMBER = "90801208"
-BANK_SORT_CODE = "20-26-24"
+BANK_ACCOUNT_NAME = os.environ.get("BANK_ACCOUNT_NAME", "Mr Jordan Houghton")
+BANK_ACCOUNT_NUMBER = os.environ.get("BANK_ACCOUNT_NUMBER", "90801208")
+BANK_SORT_CODE = os.environ.get("BANK_SORT_CODE", "20-26-24")
 
 # Email sender for order confirmations
-DEFAULT_FROM_EMAIL = "no-reply@lightlab.com"
+# DEFAULT_FROM_EMAIL = "no-reply@lightlab.com"
 
 # Contact form email address
-CONTACT_FORM_TO_EMAIL = "lightlabenquiries@gmail.com"
+CONTACT_FORM_TO_EMAIL = os.environ.get("CONTACT_FORM_TO_EMAIL", "learancanning@mail.com")
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
