@@ -306,15 +306,58 @@ def create_order(request):
     bank_text = "\n".join(bank_lines)
     payment_reference_line = f"PAY USING REFERENCE: {order.reference}"
 
-    subject = f"LightLab order {order.reference} — Payment instructions"
-    message = (
+    subject = f"LightLab order {order.reference} - Payment instructions"
+    customer_message = (
         f"Thank you for your order.\n\n"
         f"Amount to pay: £{order.total_amount}\n\n"
         f"{bank_text}\n\n"
         f"{payment_reference_line}\n\n"
         "Please use the reference above when making the bank transfer."
     )
-    send_mail(subject, message, from_email, [order.email], fail_silently=False)
+
+    # 1) Customer receipt (to buyer)
+    send_mail(
+        subject,
+        customer_message,
+        from_email,
+        [order.email],
+        fail_silently=False,
+    )
+
+    # Build order lines for internal fulfillment email
+    order_lines = []
+    for item in order.items.select_related("product").all():
+        order_lines.append(
+            f"- {item.product.name} x{item.quantity} @ £{item.unit_price} = £{item.line_total}"
+        )
+    order_items_text = "\n".join(order_lines) if order_lines else "- No items"
+
+    # 2) Internal fulfillment copy (to LightLab inbox)
+    internal_subject = f"NEW ORDER {order.reference} - Dispatch details"
+    internal_message = (
+        f"Reference: {order.reference}\n"
+        f"Created: {order.created_at}\n\n"
+        f"Customer email: {order.email}\n"
+        f"Customer name: {order.name or '(not provided)'}\n\n"
+        f"Shipping address:\n"
+        f"{order.address_line_1}\n"
+        f"{order.address_line_2}\n"
+        f"{order.town_or_city}\n"
+        f"{order.county}\n"
+        f"{order.postcode}\n"
+        f"{order.country}\n\n"
+        f"Order items:\n{order_items_text}\n\n"
+        f"Subtotal + tax total: £{order.total_amount}\n"
+        f"Payment reference required: {order.reference}\n"
+    )
+
+    send_mail(
+        internal_subject,
+        internal_message,
+        from_email,
+        [settings.CONTACT_FORM_TO_EMAIL],
+        fail_silently=False,
+    )
 
     return redirect("order_confirmation", reference=order.reference)
 
