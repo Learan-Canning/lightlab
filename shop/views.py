@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
-from .models import Product, Order, OrderItem, _generate_reference
+from .models import Product, Order, OrderItem, ProductVariant, _generate_reference
 from django.core.mail import send_mail
 from django.contrib import messages
 from decimal import Decimal
 from django.conf import settings
-from django.db import transaction, IntegrityError
+from django.db import IntegrityError, transaction
 
 
 # Homepage view: loads products and renders the one-page storefront.
 def home(request):
     all_products = Product.objects.filter(is_active=True)
-    products = all_products[:6]
+    products = all_products.prefetch_related("variants")[:6]
     total_products = all_products.count()
 
     return render(
@@ -24,7 +24,7 @@ def home(request):
 
 # Full shop page view.
 def shop(request):
-    products = Product.objects.filter(is_active=True)
+    products = Product.objects.filter(is_active=True).prefetch_related("variants")
     return render(
         request,
         "shop.html",
@@ -102,118 +102,107 @@ def about(request):
     return render(request, "about.html")
 
 
-
 def faq(request):
     return render(request, "faq.html")
 
 
-
-
 def contact(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message')
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
 
-        # Validation
         if not all([name, email, subject, message]):
-            messages.error(request, 'Please fill in all fields.')
-            return redirect('contact')
+            messages.error(request, "Please fill in all fields.")
+            return redirect("contact")
 
-        # Send email
         try:
             send_mail(
                 subject=f"New Contact Form: {subject}",
                 message=f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}",
-                from_email=settings.DEFAULT_FROM_EMAIL,   # safer than using visitor email
+                from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[settings.CONTACT_FORM_TO_EMAIL],
                 fail_silently=False,
             )
-            messages.success(request, 'Your message has been sent successfully!')
-            return redirect('contact')
-        except Exception as e:
-            messages.error(request, 'An error occurred. Please try again.')
-            return redirect('contact')
+            messages.success(request, "Your message has been sent successfully!")
+            return redirect("contact")
+        except Exception:
+            messages.error(request, "An error occurred. Please try again.")
+            return redirect("contact")
 
-    return render(request, 'contact.html')
+    return render(request, "contact.html")
+
 
 def add_to_cart(request):
-    """
-    Handles adding a product to the session-based cart.
-    Called when customer clicks 'Add to Cart' button.
-    """
-    if request.method == 'POST':
-         # Get the product ID from the form
-        product_id = request.POST.get('product_id')
-        # Get quantity (default to 1 if not provided)
-        quantity = int(request.POST.get('quantity', 1))
-        
-        # Initialize cart in session if it doesn't exist yet
-        # Cart format: {'product_id': quantity, 'product_id': quantity, ...}
-        if 'cart' not in request.session:
-            request.session['cart'] = {}
-        
-        cart = request.session['cart']
-        
-        # If product already in cart, add to quantity. Otherwise, add it.
-        if str(product_id) in cart:
-            cart[str(product_id)] += quantity
+    if request.method == "POST":
+        variant_id = request.POST.get("variant_id")
+        quantity = int(request.POST.get("quantity", 1))
+
+        if not variant_id:
+            messages.error(request, "Please choose a bottle strength.")
+            return redirect(request.POST.get("next", "shop"))
+
+        try:
+            variant = ProductVariant.objects.select_related("product").get(
+                id=int(variant_id),
+                is_active=True,
+                product__is_active=True,
+            )
+        except ProductVariant.DoesNotExist:
+            messages.error(request, "That bottle option is no longer available.")
+            return redirect(request.POST.get("next", "shop"))
+
+        if "cart" not in request.session:
+            request.session["cart"] = {}
+
+        cart = request.session["cart"]
+        cart_key = str(variant.id)
+
+        if cart_key in cart:
+            cart[cart_key] += quantity
         else:
-            cart[str(product_id)] = quantity
-        
-        # Save the session (required for changes to take effect)
+            cart[cart_key] = quantity
+
         request.session.modified = True
-        
-        # Show success message to user
-        messages.success(request, 'Product added to cart!')
-        
-        # Redirect back to where they came from (shop or home)
-        return redirect(request.POST.get('next', 'shop'))
-    
-    # If not POST request, redirect to shop
-    return redirect('shop')
+        messages.success(request, f"{variant.product.name} {variant.strength} added to cart!")
+        return redirect(request.POST.get("next", "shop"))
+
+    return redirect("shop")
+
 
 def cart(request):
-    """
-    Display the shopping cart page.
-    Shows all items in session cart with prices, quantities, and totals.
-    """
-    # Get cart from session (empty dict if no cart yet)
-    cart_data = request.session.get('cart', {})
-    
-    # Fetch product details for items in cart
+    cart_data = request.session.get("cart", {})
     cart_items = []
     subtotal = 0
-    
-    for product_id, quantity in cart_data.items():
+
+    for variant_id, quantity in list(cart_data.items()):
         try:
-            product = Product.objects.get(id=int(product_id))
-            item_total = float(product.price) * quantity
+            variant = ProductVariant.objects.select_related("product").get(id=int(variant_id))
+            item_total = float(variant.price) * quantity
             subtotal += item_total
-            
+
             cart_items.append({
-                'product': product,
-                'quantity': quantity,
-                'item_total': item_total,
+                "variant": variant,
+                "product": variant.product,
+                "quantity": quantity,
+                "item_total": item_total,
             })
-        except Product.DoesNotExist:
-            # Remove product if it no longer exists
-            del cart_data[product_id]
-    
-    # Calculate tax (10%) and total
+        except ProductVariant.DoesNotExist:
+            del cart_data[variant_id]
+
     tax = subtotal * 0.10
     total = subtotal + tax
-    
-    # Save session if we removed any deleted products
+
+    request.session["cart"] = cart_data
     request.session.modified = True
-    
-    return render(request, 'cart.html', {
-        'cart_items': cart_items,
-        'subtotal': subtotal,
-        'tax': tax,
-        'total': total,
-        'cart_count': len(cart_items),
+
+    return render(request, "cart.html", {
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "tax": tax,
+        "total": total,
+        "cart_count": len(cart_items),
     })
 
 
@@ -223,7 +212,6 @@ def create_order(request):
 
     email = request.POST.get("email", "").strip()
     name = request.POST.get("name", "").strip()
-    # Address fields
     address_line_1 = request.POST.get("address_line_1", "").strip()
     address_line_2 = request.POST.get("address_line_2", "").strip()
     town_or_city = request.POST.get("town_or_city", "").strip()
@@ -231,7 +219,6 @@ def create_order(request):
     postcode = request.POST.get("postcode", "").strip()
     country = request.POST.get("country", "United Kingdom").strip()
 
-    # Basic validation
     if not email:
         messages.error(request, "Email is required to complete checkout.")
         return redirect("cart")
@@ -244,7 +231,6 @@ def create_order(request):
         messages.error(request, "Your cart is empty.")
         return redirect("cart")
 
-    # Create order with retry to avoid rare reference collisions
     order = None
     for attempt in range(5):
         reference = _generate_reference()
@@ -268,20 +254,26 @@ def create_order(request):
                 messages.error(request, "Could not create order. Please try again.")
                 return redirect("cart")
 
-    # Build items and totals
     subtotal = Decimal("0.00")
-    for pid, qty in cart.items():
+    for variant_id, qty in cart.items():
         try:
-            product = Product.objects.get(pk=int(pid), is_active=True)
-        except Product.DoesNotExist:
+            variant = ProductVariant.objects.select_related("product").get(
+                pk=int(variant_id),
+                is_active=True,
+                product__is_active=True,
+            )
+        except ProductVariant.DoesNotExist:
             continue
-        unit_price = product.price
+
+        unit_price = variant.price
         quantity = int(qty)
         line_total = Decimal(unit_price) * quantity
         subtotal += line_total
+
         OrderItem.objects.create(
             order=order,
-            product=product,
+            product=variant.product,
+            variant=variant,
             unit_price=unit_price,
             quantity=quantity,
             line_total=line_total,
@@ -292,11 +284,9 @@ def create_order(request):
     order.total_amount = total
     order.save()
 
-    # Clear cart
-    request.session['cart'] = {}
+    request.session["cart"] = {}
     request.session.modified = True
 
-    # Send confirmation email with bank details and strict reference line
     from_email = getattr(settings, "DEFAULT_FROM_EMAIL", None)
     bank_lines = [
         f"Account name: {settings.BANK_ACCOUNT_NAME}",
@@ -315,24 +305,16 @@ def create_order(request):
         "Please use the reference above when making the bank transfer."
     )
 
-    # 1) Customer receipt (to buyer)
-    send_mail(
-        subject,
-        customer_message,
-        from_email,
-        [order.email],
-        fail_silently=False,
-    )
+    send_mail(subject, customer_message, from_email, [order.email], fail_silently=False)
 
-    # Build order lines for internal fulfillment email
     order_lines = []
-    for item in order.items.select_related("product").all():
+    for item in order.items.select_related("product", "variant").all():
+        variant_label = item.variant.strength if item.variant else "legacy item"
         order_lines.append(
-            f"- {item.product.name} x{item.quantity} @ £{item.unit_price} = £{item.line_total}"
+            f"- {item.product.name} {variant_label} x{item.quantity} @ £{item.unit_price} = £{item.line_total}"
         )
     order_items_text = "\n".join(order_lines) if order_lines else "- No items"
 
-    # 2) Internal fulfillment copy (to LightLab inbox)
     internal_subject = f"NEW ORDER {order.reference} - Dispatch details"
     internal_message = (
         f"Reference: {order.reference}\n"
@@ -364,10 +346,11 @@ def create_order(request):
 
 def order_confirmation(request, reference):
     try:
-        order = Order.objects.get(reference=reference)
+        order = Order.objects.prefetch_related("items__variant").get(reference=reference)
     except Order.DoesNotExist:
         messages.error(request, "Order not found.")
         return redirect("shop")
+
     bank = {
         "name": settings.BANK_ACCOUNT_NAME,
         "number": settings.BANK_ACCOUNT_NUMBER,
@@ -378,12 +361,13 @@ def order_confirmation(request, reference):
 
 def checkout_cancel(request):
     messages.info(request, "Checkout cancelled.")
-    return redirect('cart')
+    return redirect("cart")
+
 
 def update_cart(request):
-    if request.method == 'POST':
-        product_id = str(request.POST.get('product_id', ''))
-        quantity_raw = request.POST.get('quantity', '1')
+    if request.method == "POST":
+        variant_id = str(request.POST.get("variant_id", ""))
+        quantity_raw = request.POST.get("quantity", "1")
 
         try:
             quantity = int(quantity_raw)
@@ -393,29 +377,29 @@ def update_cart(request):
         if quantity < 1:
             quantity = 1
 
-        cart_data = request.session.get('cart', {})
+        cart_data = request.session.get("cart", {})
 
-        if product_id in cart_data:
-            cart_data[product_id] = quantity
-            request.session['cart'] = cart_data
+        if variant_id in cart_data:
+            cart_data[variant_id] = quantity
+            request.session["cart"] = cart_data
             request.session.modified = True
-            messages.success(request, 'Cart quantity updated.')
+            messages.success(request, "Cart quantity updated.")
 
-    return redirect('cart')
+    return redirect("cart")
 
 
 def remove_from_cart(request):
-    if request.method == 'POST':
-        product_id = str(request.POST.get('product_id', ''))
-        cart_data = request.session.get('cart', {})
+    if request.method == "POST":
+        variant_id = str(request.POST.get("variant_id", ""))
+        cart_data = request.session.get("cart", {})
 
-        if product_id in cart_data:
-            del cart_data[product_id]
-            request.session['cart'] = cart_data
+        if variant_id in cart_data:
+            del cart_data[variant_id]
+            request.session["cart"] = cart_data
             request.session.modified = True
-            messages.success(request, 'Item removed from cart.')
+            messages.success(request, "Item removed from cart.")
 
-    return redirect('cart')
+    return redirect("cart")
 
 
 

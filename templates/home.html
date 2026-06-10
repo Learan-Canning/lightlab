@@ -86,7 +86,7 @@
 
       <!-- Right header group: quick shop/cart icon -->
       <div class="flex justify-end">
-        <a href="/cart/" class="p-2 rounded-lg border border-[#e8e0f2]" aria-label="Go to cart"> <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+        <a href="/cart/" class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Go to cart"> <i data-lucide="shopping-bag" class="w-5 h-5"></i>
         </a>
       </div>
     </div>
@@ -212,14 +212,18 @@
 
             <h3 class="font-semibold text-sm sm:text-base">{{ product.name }}</h3>
             <p class="mt-1 text-llprimary text-base font-semibold">£{{ product.price }}</p>
-            <p class="mt-2 text-xs sm:text-sm text-[#645c74] leading-relaxed">{{ product.description }}</p>
+            {% if product.starting_price %}
+              <p class="mt-1 text-llprimary text-base font-semibold">From £{{ product.starting_price }}</p>
+            {% else %}
+              <p class="mt-1 text-[#8b829b] text-base font-semibold">See options</p>
+            {% endif %}
 
           <div class="mt-auto flex justify-end">
-            <button class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Add to basket">
+            <a href="/shop/" class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Choose bottle strength">
               <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-              <span class="sr-only">Add to basket</span>
-            </button>
-        </div>
+              <span class="sr-only">Choose bottle strength</span>
+            </a>
+          </div>
           </article>
         {% endfor %}
       </div>

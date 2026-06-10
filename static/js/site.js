@@ -38,4 +38,59 @@ document.addEventListener("DOMContentLoaded", () => {
       arrow.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
     });
   });
+
+  // Age gate logic
+
+  const isHomePage = window.location.pathname === "/";
+  const navEntry = performance.getEntriesByType("navigation")[0];
+  const navType = navEntry ? navEntry.type : "navigate";
+
+  let isInternalReferrer = false;
+  if (document.referrer) {
+    try {
+      isInternalReferrer =
+        new URL(document.referrer).origin === window.location.origin;
+    } catch (err) {
+      isInternalReferrer = false;
+    }
+  }
+
+  // Show on:
+  // - first/return visits from outside (navigate + external/empty referrer)
+  // - refreshes (reload)
+  // Skip on internal navigation (navigate + internal referrer)
+  const shouldShowAgeGate =
+    isHomePage &&
+    (navType === "reload" || (navType === "navigate" && !isInternalReferrer));
+
+  if (shouldShowAgeGate) {
+    const ageGate = document.createElement("div");
+    ageGate.className = "age-gate";
+    ageGate.innerHTML = `
+      <div class="age-gate__panel" role="dialog" aria-modal="true" aria-labelledby="age-gate-title">
+        <div class="age-gate__logo-wrap">
+          <img src="/static/img/lightlablogo.jpg" alt="LightLab logo" class="age-gate__logo">
+        </div>
+        <p class="age-gate__eyebrow">18+ Only</p>
+        <h2 id="age-gate-title" class="age-gate__title">Enter LightLabs</h2>
+        <p class="age-gate__text">
+          This website contains age-restricted Products.
+          Research Purposes only. You must be 18 or over to enter.
+        </p>
+        <div class="age-gate__actions">
+          <button type="button" class="age-gate__enter">Enter Site</button>
+          <a href="https://www.google.com" class="age-gate__leave">Leave</a>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(ageGate);
+    document.body.style.overflow = "hidden";
+
+    const enterButton = ageGate.querySelector(".age-gate__enter");
+    enterButton.addEventListener("click", () => {
+      ageGate.remove();
+      document.body.style.overflow = "";
+    });
+  }
 });

@@ -1,32 +1,47 @@
-from django.db import models
 from decimal import Decimal, ROUND_HALF_UP
 from uuid import uuid4
 
+from django.db import models
 
-# Product model used by the homepage shop section.
+
+def _generate_reference():
+    return uuid4().hex[:12].upper()
+
+
 class Product(models.Model):
-    # Core product details.
     name = models.CharField(max_length=200)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-
-    # Default text shown if no custom description is entered.
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     description = models.TextField(
         default="This is a synthetic research chemical supplied as lyophilized powder. Third-party tested at 99%+ purity. For laboratory research use only."
     )
-
-    # Optional image uploaded in Django admin.
     image = models.ImageField(upload_to="products/", blank=True, null=True)
-
-    # Lets you hide a product without deleting it.
     is_active = models.BooleanField(default=True)
 
-    # Admin and shell string representation.
     def __str__(self):
         return self.name
 
-  
-def _generate_reference():
-    return uuid4().hex[:12].upper()
+    @property
+    def starting_price(self):
+        active_variants = self.variants.filter(is_active=True).order_by("price")
+        first_variant = active_variants.first()
+        if first_variant:
+            return first_variant.price
+        return None
+
+
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="variants")
+    strength = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["product__name", "price", "strength"]
+        unique_together = ("product", "strength")
+
+    def __str__(self):
+        return f"{self.product.name} - {self.strength}"
+
 
 class Order(models.Model):
     STATUS_PENDING = "pending"
@@ -56,16 +71,22 @@ class Order(models.Model):
     def __str__(self):
         return f"{self.reference} — {self.email}"
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    variant = models.ForeignKey(ProductVariant, on_delete=models.PROTECT, null=True, blank=True)
     unit_price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveIntegerField()
     line_total = models.DecimalField(max_digits=10, decimal_places=2)
 
     def save(self, *args, **kwargs):
-        self.line_total = (Decimal(self.unit_price) * Decimal(self.quantity)).quantize(Decimal("0.01"), ROUND_HALF_UP)
+        self.line_total = (Decimal(self.unit_price) * Decimal(self.quantity)).quantize(
+            Decimal("0.01"),
+            ROUND_HALF_UP,
+        )
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.product.name} x{self.quantity} — {self.order.reference}"
+        variant_label = self.variant.strength if self.variant else "no variant"
+        return f"{self.product.name} {variant_label} x{self.quantity} — {self.order.reference}"

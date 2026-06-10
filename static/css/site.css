@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Parisienne&display=swap");
+
 /* Smooth anchor scrolling for one-page navigation. */
 html {
   scroll-behavior: smooth;
@@ -18,4 +20,253 @@ html {
 /* Slightly thicker default stroke for Lucide SVG icons. */
 [data-lucide] {
   stroke-width: 1.75;
+}
+
+@keyframes age-gate-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(169, 135, 216, 0.35);
+  }
+  50% {
+    transform: scale(1.075);
+    box-shadow: 0 0 0 26px rgba(169, 135, 216, 0);
+  }
+}
+
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top, rgba(169, 135, 216, 0.22), transparent 45%),
+    rgba(249, 248, 252, 0.98);
+  backdrop-filter: blur(10px);
+}
+
+.age-gate[hidden] {
+  display: none;
+}
+
+.age-gate__panel {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 32px;
+  padding: 36px 32px;
+  text-align: center;
+  overflow: hidden;
+
+  /* Transparent premium glass */
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.18),
+    rgba(255, 255, 255, 0.06)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+
+  box-shadow:
+    0 26px 80px rgba(31, 27, 41, 0.24),
+    0 10px 36px rgba(169, 135, 216, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.age-gate__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(169, 135, 216, 0.45),
+    rgba(255, 255, 255, 0.25)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.95;
+}
+
+.age-gate__panel::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  left: -10%;
+  width: 120%;
+  height: 70%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.26) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  filter: blur(10px);
+}
+
+.age-gate__logo-wrap {
+  width: 166px;
+  height: 166px;
+  margin: 0 auto 24px;
+  border-radius: 9999px;
+  padding: 12px;
+  background: linear-gradient(135deg, #efe8f8, #ffffff);
+  animation: age-gate-pulse 2.1s ease-in-out infinite;
+}
+
+.age-gate__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 9999px;
+  border: 3px solid #a987d8;
+}
+
+.age-gate__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #a987d8;
+}
+
+.age-gate__title {
+  margin-top: 10px;
+  font-family: "Parisienne", "Cormorant Garamond", cursive;
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: 0.005em;
+  color: #a987d8;
+  text-shadow:
+    0 0 4px rgba(169, 135, 216, 0.35),
+    0 0 10px rgba(169, 135, 216, 0.2);
+  animation: age-gate-neon-flicker 3.8s ease-in-out infinite;
+}
+
+.age-gate__text {
+  margin-top: 14px;
+  color: #645c74;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.age-gate__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.age-gate__enter,
+.age-gate__leave {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 54px;
+  padding: 0 22px;
+  border-radius: 9999px;
+  font-family: "Inter", "Cormorant Garamond", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #a987d8;
+  border: 1px solid rgba(169, 135, 216, 0.42);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.08)
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.24s ease;
+  box-shadow:
+    0 6px 18px rgba(31, 27, 41, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.age-gate__enter {
+color: #a987d8;
+background: transparent;
+}
+
+
+
+.age-gate__leave {
+color: #a987d8;
+background: transparent;
+}
+
+.age-gate__enter:hover,
+.age-gate__leave:hover {
+transform: translateY(-2px);
+color: #ffffff;
+border-color: rgba(169, 135, 216, 0.85);
+background: linear-gradient(
+135deg,
+rgba(169, 135, 216, 0.72),
+rgba(146, 111, 200, 0.66)
+);
+box-shadow:
+0 16px 34px rgba(169, 135, 216, 0.34),
+0 0 0 1px rgba(169, 135, 216, 0.38),
+0 0 24px rgba(169, 135, 216, 0.42);
+}
+
+@media (min-width: 640px) {
+  .age-gate__actions {
+    flex-direction: row;
+  }
+
+  .age-gate__actions > * {
+    flex: 1;
+  }
+}
+
+.age-gate::before,
+.age-gate::after {
+  content: "";
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  min-width: 260px;
+  min-height: 260px;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(34px);
+  opacity: 0.55;
+}
+
+.age-gate::before {
+  top: -18%;
+  left: -14%;
+  background: radial-gradient(circle, rgba(233, 163, 208, 0.55), rgba(233, 163, 208, 0));
+}
+
+.age-gate::after {
+  bottom: -18%;
+  right: -14%;
+  background: radial-gradient(circle, rgba(200, 154, 238, 0.5), rgba(200, 154, 238, 0));
+}
+
+@keyframes age-gate-neon-flicker {
+  0%, 100% {
+    opacity: 0.98;
+    filter: saturate(1);
+  }
+  50% {
+    opacity: 0.9;
+    filter: saturate(1.08);
+  }
 }

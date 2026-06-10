@@ -114,43 +114,60 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {% for product in products %}
         <article class="relative bg-llcard rounded-xl border border-[#ece5f5] shadow-sm overflow-hidden hover:shadow-md transition">
-          
-          <!-- Product Image Container -->
           <div class="relative aspect-square rounded-t-xl bg-[#f4f0fa] overflow-hidden">
             {% if product.image %}
               <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" />
             {% else %}
               <div class="w-full h-full flex items-center justify-center text-xs text-[#8b829b]">Image coming soon</div>
             {% endif %}
-            
-            <!-- Best Seller Badge (conditional - you can add a field to Product model) -->
-            {% if product.is_best_seller %}
-              <div class="absolute top-3 left-3 px-3 py-1 rounded-full bg-llprimary text-white text-xs font-semibold">
-                BEST SELLER
-              </div>
-            {% endif %}
           </div>
 
-          <!-- Product Info -->
           <div class="p-4 sm:p-5">
-            <p class="text-xs font-semibold text-llprimary tracking-wider uppercase mb-2">{{ product.category }}</p>
-            <h3 class="font-semibold text-sm sm:text-base text-lltext mb-2 line-clamp-2">{{ product.name }}</h3>
-            <p class="text-xs sm:text-sm text-[#645c74] leading-relaxed mb-4 line-clamp-2">{{ product.description }}</p>
-            
-            <!-- Price & Add to Cart -->
-            <div class="flex items-center justify-between">
-              <p class="text-llprimary text-base font-semibold">£{{ product.price }}</p>
+            <h3 class="font-semibold text-sm sm:text-base text-lltext mb-2">{{ product.name }}</h3>
+            <p class="text-xs sm:text-sm text-[#645c74] leading-relaxed mb-4">{{ product.description }}</p>
 
-              <form method="POST" action="/add-to-cart/">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ product.id }}">
-                <input type="hidden" name="quantity" value="1">
-                <input type="hidden" name="next" value="/shop/">
-                <button type="submit" class="p-2 border border-transparent rounded-lg hover:border-llprimary transition" aria-label="Add to cart">
-                  <i data-lucide="shopping-bag" class="w-5 h-5 text-llprimary"></i>
-                </button>
-              </form>
-            </div>
+            {% with variants=product.variants.all %}
+              {% if variants %}
+                <form method="POST" action="/add-to-cart/" class="space-y-4">
+                  {% csrf_token %}
+                  <input type="hidden" name="quantity" value="1">
+                  <input type="hidden" name="next" value="/shop/">
+
+                  <div>
+                    <p class="text-xs font-semibold text-llprimary tracking-wider uppercase mb-2">Bottle strength</p>
+                    <div class="flex flex-wrap gap-2">
+                      {% for variant in variants %}
+                        {% if variant.is_active %}
+                          <label class="cursor-pointer">
+                            <input
+                              type="radio"
+                              name="variant_id"
+                              value="{{ variant.id }}"
+                              class="sr-only peer"
+                              {% if forloop.first %}checked{% endif %}
+                            >
+                            <span class="inline-flex items-center rounded-full border border-[#dfd4ef] px-3 py-1.5 text-xs font-semibold text-[#5a506c] peer-checked:border-llprimary peer-checked:bg-llsoft peer-checked:text-llprimary">
+                              {{ variant.strength }} - £{{ variant.price }}
+                            </span>
+                          </label>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="flex justify-end">                  
+                  <button
+                    type="submit"
+                    class="inline-flex items-center justify-center rounded-lg border border-transparent p-2 hover:border-llprimary transition"
+                    aria-label="Add to basket"
+                  >
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                  </button>
+                  </div>
+                </form>
+              {% else %}
+                <p class="text-sm text-[#8b829b]">No bottle options available.</p>
+              {% endif %}
+            {% endwith %}
           </div>
         </article>
       {% empty %}
