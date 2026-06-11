@@ -91,6 +91,9 @@ html {
     rgba(169, 135, 216, 0.45),
     rgba(255, 255, 255, 0.25)
   );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -268,5 +271,38 @@ box-shadow:
   50% {
     opacity: 0.9;
     filter: saturate(1.08);
+  }
+}
+
+/* Global reveal system for premium scroll-in motion */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(2px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.reveal-delay-0 { transition-delay: 0.05s; }
+.reveal-delay-1 { transition-delay: 0.18s; }
+.reveal-delay-2 { transition-delay: 0.32s; }
+.reveal-delay-3 { transition-delay: 0.46s; }
+.reveal-delay-4 { transition-delay: 0.60s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
   }
 }
