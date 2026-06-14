@@ -81,7 +81,7 @@
   </header>
 
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-    <div class="text-center mb-12">
+    <div class="reveal text-center mb-12">
       <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">
         Quality and Trust
       </p>
@@ -94,9 +94,9 @@
       </p>
     </div>
 
-    <section class="mb-14">
+    <section class="reveal mb-14">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
             <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
             </div>
@@ -104,7 +104,7 @@
             <p class="text-sm text-[#645c74]">All products undergo third-party testing for quality assurance.</p>
             </article>
 
-            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
             <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
                 <i data-lucide="file-check" class="w-5 h-5"></i>
             </div>
@@ -112,7 +112,7 @@
             <p class="text-sm text-[#645c74]">Certificates of analysis available for every batch we supply.</p>
             </article>
 
-            <article class="bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
+            <article class="reveal reveal-delay-2 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
             <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
                 <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
             </div>
@@ -122,9 +122,9 @@
         </div>
     </section>
 
-    <div class="space-y-4">
+    <div class="reveal space-y-4">
       {% for cert in certificates %}
-        <article class="bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
+        <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
           <h3 class="font-heading text-2xl mb-2">{{ cert.title }}</h3>
           <div class="flex flex-wrap items-center gap-3 text-sm text-[#645c74]">
             <span class="font-semibold text-lltext">{{ cert.product }}</span>
@@ -134,7 +134,7 @@
           </div>
         </article>
       {% empty %}
-        <div class="bg-white border border-[#ece5f5] rounded-2xl p-6 text-center text-[#645c74]">
+        <div class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-6 text-center text-[#645c74]">
           No certificates available yet.
         </div>
       {% endfor %}

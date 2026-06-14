@@ -1,6 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
   const menuBtn = document.getElementById("menuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
+  let revealInitialized = false;
+
+  const initializeRevealObserver = () => {
+    if (revealInitialized) return;
+
+    const revealItems = document.querySelectorAll(".reveal");
+    if (!revealItems.length) return;
+
+    revealInitialized = true;
+
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.16,
+        rootMargin: "0px 0px -8% 0px",
+      }
+    );
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+  };
 
   // Mobile menu toggle
   if (menuBtn && mobileMenu) {
@@ -91,27 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     enterButton.addEventListener("click", () => {
       ageGate.remove();
       document.body.style.overflow = "";
+      window.requestAnimationFrame(() => {
+        initializeRevealObserver();
+      });
     });
-  }
-
-  // Scroll reveal observer
-  const revealItems = document.querySelectorAll(".reveal");
-
-  if (revealItems.length) {
-    const revealObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.16,
-        rootMargin: "0px 0px -8% 0px",
-      }
-    );
-
-    revealItems.forEach((item) => revealObserver.observe(item));
+  } else {
+    initializeRevealObserver();
   }
 });

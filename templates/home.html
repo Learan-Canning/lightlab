@@ -141,11 +141,11 @@
     </section>
 
     <!-- Feature cards section -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <section class="reveal max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
         <!-- Feature card 1 -->
-        <article class="bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
+        <article class="reveal reveal-delay-0 bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
           <div class="mx-auto mb-3 h-10 w-10 rounded-lg bg-llsoft flex items-center justify-center text-llprimary">
             <i data-lucide="sparkles" class="w-4 h-4"></i>
           </div>
@@ -154,7 +154,7 @@
         </article>
 
         <!-- Feature card 2 -->
-        <article class="bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
+        <article class="reveal reveal-delay-1 bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
           <div class="mx-auto mb-3 h-10 w-10 rounded-lg bg-llsoft flex items-center justify-center text-llprimary">
             <i data-lucide="shield-check" class="w-4 h-4"></i>
           </div>
@@ -163,7 +163,7 @@
         </article>
 
         <!-- Feature card 3 -->
-        <article class="bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
+        <article class="reveal reveal-delay-2 bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
           <div class="mx-auto mb-3 h-10 w-10 rounded-lg bg-llsoft flex items-center justify-center text-llprimary">
             <i data-lucide="badge-check" class="w-4 h-4"></i>
           </div>
@@ -172,7 +172,7 @@
         </article>
 
         <!-- Feature card 4 -->
-        <article class="bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
+        <article class="reveal reveal-delay-3 bg-white border border-transparent hover:border-[#ece5f5] rounded-2xl p-4 sm:p-5 text-center transition-all duration-200">
           <div class="mx-auto mb-3 h-10 w-10 rounded-lg bg-llsoft flex items-center justify-center text-llprimary">
             <i data-lucide="truck" class="w-4 h-4"></i>
           </div>
@@ -183,9 +183,9 @@
     </section>
 
     <!-- Products section -->
-    <section id="products" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <section id="products" class="reveal max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <!-- Products heading and product count -->
-      <div class="flex items-end justify-between mb-6">
+      <div class="reveal reveal-delay-0 flex items-end justify-between mb-6">
         <h2 class="text-3xl sm:text-4xl font-heading">Featured Products</h2>
 
         <div class="flex items-center gap-3 text-[#6f6780]">
@@ -199,7 +199,7 @@
       <!-- Product cards grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {% for product in products %}
-          <article class="relative bg-llcard rounded-xl border border-[#ece5f5] shadow-sm p-3 sm:p-4 flex flex-col h-full">
+          <article class="reveal reveal-delay-1 relative bg-llcard rounded-xl border border-[#ece5f5] shadow-sm p-3 sm:p-4 flex flex-col h-full">
             <div class="aspect-square rounded-lg bg-[#f4f0fa] overflow-hidden mb-3">
               {% if product.image %}
                 <!-- Real product image -->
@@ -230,8 +230,8 @@
     </section>
 
     <!-- Category browse section -->
-      <section class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
-        <div class="text-center mb-10 sm:mb-14">
+      <section class="reveal max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div class="reveal reveal-delay-0 text-center mb-10 sm:mb-14">
           <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase">
             Browse by Category
           </p>
@@ -241,7 +241,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          <article class="rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
+          <article class="reveal reveal-delay-0 rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
             <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-llsoft text-llprimary text-2xl font-heading">
               P
             </div>
@@ -252,7 +252,7 @@
             </a>
           </article>
 
-          <article class="rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
+          <article class="reveal reveal-delay-1 rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
             <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-llsoft text-llprimary text-2xl font-heading">
               S
             </div>
@@ -263,7 +263,7 @@
             </a>
           </article>
 
-          <article class="rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
+          <article class="reveal reveal-delay-2 rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
             <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-llsoft text-llprimary text-2xl font-heading">
               N
             </div>
@@ -274,7 +274,7 @@
             </a>
           </article>
 
-          <article class="rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
+          <article class="reveal reveal-delay-3 rounded-3xl border border-[#ece5f5] bg-white/80 backdrop-blur-sm shadow-[0_10px_30px_rgba(31,27,41,0.04)] p-8 text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(31,27,41,0.08)]">
             <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-llsoft text-llprimary text-2xl font-heading">
               B
             </div>
@@ -288,11 +288,11 @@
       </section>
 
     <!-- About section -->
-      <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+      <section id="about" class="reveal max-w-7xl mx-auto px-4 sm:px-6 py-20">
         <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-6 lg:gap-8 items-center">
 
     <!-- Left: larger circular logo -->
-    <div class="flex justify-center lg:justify-center">
+    <div class="reveal reveal-delay-0 flex justify-center lg:justify-center">
       <div class="w-72 h-72 sm:w-80 sm:h-80 lg:w-[24rem] lg:h-[24rem] rounded-full border-[5px] border-llprimary bg-white shadow-md overflow-hidden">
         <img
           src="{% static 'img/lightlablogo.jpg' %}"
@@ -303,7 +303,7 @@
     </div>
 
     <!-- Right: larger about content -->
-    <div>
+    <div class="reveal reveal-delay-1">
       <p class="text-sm font-semibold text-llprimary tracking-widest uppercase mb-4">About LightLab</p>
       <h2 class="text-5xl sm:text-6xl font-heading leading-tight mb-6">A New Standard in Research Products</h2>
       <p class="text-lg text-[#645c74] leading-relaxed mb-5">
@@ -323,8 +323,8 @@
     </section>
 
         <!-- FAQ section -->
-    <section id="faq" class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-      <div class="text-center mb-12">
+    <section id="faq" class="reveal max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="reveal reveal-delay-0 text-center mb-12">
         <p class="text-xs font-semibold text-llprimary tracking-widest uppercase mb-2">Common Questions</p>
         <h2 class="text-4xl sm:text-5xl font-heading">Frequently Asked</h2>
       </div>
@@ -332,7 +332,7 @@
       <!-- Accordion items -->
       <div class="max-w-2xl mx-auto space-y-3">
             <!-- FAQ item 1 -->
-            <div class="bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
+            <div class="reveal reveal-delay-0 bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
               <button class="faq-toggle w-full text-left p-6 flex justify-between items-center hover:bg-[#f9f8fc] transition" aria-expanded="false">
                 <span class="font-semibold text-lg">How do I place an order?</span>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-llprimary transition-transform"></i>
@@ -343,7 +343,7 @@
             </div>
 
             <!-- FAQ item 2 -->
-            <div class="bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
+            <div class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
               <button class="faq-toggle w-full text-left p-6 flex justify-between items-center hover:bg-[#f9f8fc] transition" aria-expanded="false">
                 <span class="font-semibold text-lg">What payment methods do you accept?</span>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-llprimary transition-transform"></i>
@@ -354,7 +354,7 @@
             </div>
 
             <!-- FAQ item 3 -->
-            <div class="bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
+            <div class="reveal reveal-delay-2 bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
               <button class="faq-toggle w-full text-left p-6 flex justify-between items-center hover:bg-[#f9f8fc] transition" aria-expanded="false">
                 <span class="font-semibold text-lg">Can I modify or cancel my order?</span>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-llprimary transition-transform"></i>
@@ -365,7 +365,7 @@
             </div>
 
             <!-- FAQ item 4 -->
-            <div class="bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
+            <div class="reveal reveal-delay-3 bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
               <button class="faq-toggle w-full text-left p-6 flex justify-between items-center hover:bg-[#f9f8fc] transition" aria-expanded="false">
                 <span class="font-semibold text-lg">How long does shipping take?</span>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-llprimary transition-transform"></i>
@@ -376,7 +376,7 @@
             </div>
 
             <!-- FAQ item 5 -->
-            <div class="bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
+            <div class="reveal reveal-delay-4 bg-white border border-[#ece5f5] rounded-xl overflow-hidden">
               <button class="faq-toggle w-full text-left p-6 flex justify-between items-center hover:bg-[#f9f8fc] transition" aria-expanded="false">
                 <span class="font-semibold text-lg">Do you offer international shipping?</span>
                 <i data-lucide="chevron-down" class="w-5 h-5 text-llprimary transition-transform"></i>
@@ -388,7 +388,7 @@
           </div>
 
           <!-- View all link at bottom -->
-          <div class="text-center mt-10">
+          <div class="reveal reveal-delay-1 text-center mt-10">
             <a href="/faq" class="inline-flex items-center gap-2 text-llprimary font-semibold hover:underline">
               View All Questions <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
@@ -396,10 +396,10 @@
         </section>
 
     <!-- Contact section -->
-    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
-      <h2 class="text-4xl sm:text-5xl font-heading mb-4">Questions?</h2>
-      <p class="text-lg text-[#645c74] mb-8">Get in touch with our team</p>
-      <a href="/contact" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
+    <section class="reveal max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
+      <h2 class="reveal reveal-delay-0 text-4xl sm:text-5xl font-heading mb-4">Questions?</h2>
+      <p class="reveal reveal-delay-1 text-lg text-[#645c74] mb-8">Get in touch with our team</p>
+      <a href="/contact" class="reveal reveal-delay-2 inline-flex items-center gap-2 px-8 py-4 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition">
       Contact Us <i data-lucide="arrow-right" class="w-5 h-5"></i>
   </a>
         </section>

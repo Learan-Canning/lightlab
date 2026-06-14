@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="max-w-4xl mx-auto text-center mb-12 sm:mb-16">
-  <p class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-[0.28em] uppercase">
+<section class="reveal max-w-4xl mx-auto text-center mb-12 sm:mb-16">
+  <p class="reveal reveal-delay-0 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-llsoft text-llprimary text-xs sm:text-sm font-semibold tracking-[0.28em] uppercase">
     Order Confirmed
   </p>
 
-  <h1 class="mt-6 text-5xl sm:text-6xl md:text-7xl font-heading leading-tight">
+  <h1 class="reveal reveal-delay-1 mt-6 text-5xl sm:text-6xl md:text-7xl font-heading leading-tight">
     Thank You
   </h1>
 
-  <p class="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-[#645c74]">
+  <p class="reveal reveal-delay-2 mt-6 max-w-2xl mx-auto text-base sm:text-lg text-[#645c74]">
     Your order has been created successfully. Please use the reference below when making your bank transfer.
   </p>
 </section>
 
-<section class="max-w-4xl mx-auto space-y-6">
-  <article class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-200">
+<section class="reveal max-w-4xl mx-auto space-y-6">
+  <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-200">
     <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
       <h2 class="font-heading text-3xl sm:text-4xl">Payment Details</h2>
       <p class="text-sm text-[#645c74]">
@@ -63,14 +63,14 @@
     </div>
   </article>
 
-  <article class="bg-llsoft border border-[#e8e0f2] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-[#d8c8ee] transition duration-200">
+  <article class="reveal reveal-delay-1 bg-llsoft border border-[#e8e0f2] rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-[#d8c8ee] transition duration-200">
     <p class="font-semibold text-lltext">Important payment reference</p>
     <p class="mt-3 text-lg sm:text-xl tracking-wide text-lltext">
       PAY USING REFERENCE: {{ order.reference }}
     </p>
   </article>
 
-  <div class="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+  <div class="reveal reveal-delay-2 flex flex-col sm:flex-row gap-4 justify-center pt-2">
     <a href="/shop/" class="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-llprimary text-white font-semibold hover:bg-llprimaryDark transition duration-200">
       Continue Shopping
     </a>
@@ -79,7 +79,7 @@
     </a>
   </div>
 
-  <p class="text-center text-[#645c74]">
+  <p class="reveal reveal-delay-3 text-center text-[#645c74]">
     After you make the transfer using the reference above, we will process your order.
   </p>
 </section>

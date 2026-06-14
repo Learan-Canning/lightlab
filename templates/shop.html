@@ -73,14 +73,14 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
     
     <!-- Hero / Title Section -->
-    <div class="text-center mb-12">
+    <div class="reveal text-center mb-12">
       <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">Our Collection</p>
       <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">Shop All Products</h1>
       <p class="text-base text-[#645c74] max-w-2xl mx-auto">Browse our curated selection of premium research products.</p>
     </div>
 
     <!-- Filter & Search Bar -->
-    <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+    <div class="reveal reveal-delay-0 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
       
       <!-- Category Filter Buttons -->
       <div class="flex flex-wrap items-center gap-3">
@@ -108,12 +108,12 @@
     </div>
 
     <!-- Product Count -->
-    <p class="text-sm text-[#645c74] mb-6">{{ products.count }} products</p>
+    <p class="reveal reveal-delay-1 text-sm text-[#645c74] mb-6">{{ products.count }} products</p>
 
     <!-- Products Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       {% for product in products %}
-        <article class="relative bg-llcard rounded-xl border border-[#ece5f5] shadow-sm overflow-hidden hover:shadow-md transition">
+        <article class="reveal reveal-delay-1 relative bg-llcard rounded-xl border border-[#ece5f5] shadow-sm overflow-hidden hover:shadow-md transition">
           <div class="relative aspect-square rounded-t-xl bg-[#f4f0fa] overflow-hidden">
             {% if product.image %}
               <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover" />

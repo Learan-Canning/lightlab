@@ -39,7 +39,7 @@
 
   <body class="bg-llbg text-lltext font-body antialiased">
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
-      <section class="text-center mb-12">
+      <section class="reveal text-center mb-12">
         <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">
           Basket
         </p>
@@ -50,10 +50,10 @@
       </section>
 
       {% if cart_items %}
-      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-        <div class="lg:col-span-2 space-y-4">
+      <section class="reveal grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="reveal reveal-delay-0 lg:col-span-2 space-y-4">
           {% for item in cart_items %}
-          <article class="bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
+          <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
             <div class="flex items-start justify-between gap-4">
               <div>
                 <h2 class="font-semibold text-lg sm:text-xl">{{ item.product.name }} {{ item.variant.strength }}</h2>
@@ -102,7 +102,7 @@
           {% endfor %}
         </div>
 
-        <aside class="bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-7 h-fit shadow-sm">
+        <aside class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-6 sm:p-7 h-fit shadow-sm">
           <h3 class="font-heading text-3xl mb-5">Order Summary</h3>
 
           <div class="space-y-3 text-sm">
@@ -161,7 +161,7 @@
         </aside>
       </section>
       {% else %}
-      <section class="max-w-2xl mx-auto bg-white border border-[#ece5f5] rounded-2xl p-10 text-center shadow-sm">
+      <section class="reveal max-w-2xl mx-auto bg-white border border-[#ece5f5] rounded-2xl p-10 text-center shadow-sm">
         <h2 class="font-heading text-4xl mb-3">Your cart is empty</h2>
         <p class="text-[#645c74] mb-7">Add products from the shop to get started.</p>
         <a
@@ -173,5 +173,10 @@
       </section>
       {% endif %}
     </main>
+    <script src="{% static 'js/site.js' %}" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
