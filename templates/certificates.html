@@ -80,65 +80,197 @@
     </nav>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-    <div class="reveal text-center mb-12">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
+    <section class="reveal text-center mb-10 sm:mb-12 rounded-3xl border border-[#e8e0f2] bg-white/80 backdrop-blur-sm px-5 py-8 sm:px-8 sm:py-10 shadow-[0_12px_36px_rgba(31,27,41,0.06)]">
       <p class="text-xs sm:text-sm font-semibold tracking-[0.28em] text-llprimary uppercase mb-3">
-        Quality and Trust
+        LightLab Education
       </p>
-      <h1 class="text-5xl sm:text-6xl font-heading leading-tight mb-4">
-        Certificates and Documentation
+      <h1 class="text-4xl sm:text-6xl font-heading leading-tight mb-4">
+        LightLab Education Hub
       </h1>
-      <p class="text-base sm:text-lg text-[#645c74] max-w-2xl mx-auto">
-        Transparency is at our core. Every product batch is independently tested and documented.
-        Below you'll find our certificates of analysis.
+      <p class="text-base sm:text-lg text-[#645c74] max-w-3xl mx-auto">
+        At LightLab, we believe that understanding the science behind research peptides is just as important as understanding the products themselves.
+        This educational hub has been created to help you learn more about peptide research, why these compounds are generating so much interest in 2026, and the areas scientists are currently investigating.
       </p>
-    </div>
-
-    <section class="reveal mb-14">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
-            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
-                <i data-lucide="shield-check" class="w-5 h-5"></i>
-            </div>
-            <h3 class="font-heading text-3xl mb-3">Independently Tested</h3>
-            <p class="text-sm text-[#645c74]">All products undergo third-party testing for quality assurance.</p>
-            </article>
-
-            <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
-            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
-                <i data-lucide="file-check" class="w-5 h-5"></i>
-            </div>
-            <h3 class="font-heading text-3xl mb-3">Full Documentation</h3>
-            <p class="text-sm text-[#645c74]">Certificates of analysis available for every batch we supply.</p>
-            </article>
-
-            <article class="reveal reveal-delay-2 bg-white border border-[#ece5f5] rounded-2xl p-8 text-center">
-            <div class="mx-auto mb-5 h-12 w-12 rounded-xl bg-llsoft flex items-center justify-center text-llprimary">
-                <i data-lucide="calendar-check-2" class="w-5 h-5"></i>
-            </div>
-            <h3 class="font-heading text-3xl mb-3">Regularly Updated</h3>
-            <p class="text-sm text-[#645c74]">New certificates added with each batch to ensure transparency.</p>
-            </article>
-        </div>
+      <div class="mt-6 mx-auto h-1 w-32 rounded-full bg-gradient-to-r from-transparent via-llprimary to-transparent"></div>
     </section>
 
-    <div class="reveal space-y-4">
-      {% for cert in certificates %}
-        <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-5 sm:p-6 shadow-sm">
-          <h3 class="font-heading text-2xl mb-2">{{ cert.title }}</h3>
-          <div class="flex flex-wrap items-center gap-3 text-sm text-[#645c74]">
-            <span class="font-semibold text-lltext">{{ cert.product }}</span>
-            <span class="px-3 py-1 rounded-full bg-[#f5f2fb] border border-[#e8e0f2]">Batch: {{ cert.batch }}</span>
-            <span class="px-3 py-1 rounded-full bg-[#e7f8ef] text-[#217a4b] font-semibold">{{ cert.purity }}% Purity</span>
-            <span>Tested: {{ cert.tested }}</span>
+    <section class="space-y-10 sm:space-y-12">
+      <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">What Are Peptides?</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Peptides are short chains of amino acids, often referred to as the building blocks of proteins.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Naturally occurring peptides play important roles throughout the body and are involved in communication between cells, tissues, and biological systems.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          Researchers study peptides because of their potential involvement in a wide range of biological processes, including metabolism, recovery, skin health, cognitive function, energy production, and healthy ageing.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">Why Are Peptides So Popular In 2026?</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Interest in peptide research has grown significantly over the last few years.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-5">
+          Scientists, healthcare professionals, researchers, and biotechnology companies are increasingly exploring peptides due to their ability to interact with specific biological pathways within the body.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-3">Some of the most researched areas include:</p>
+        <ul class="list-disc pl-6 text-[#645c74] space-y-1">
+          <li>Metabolic health</li>
+          <li>Weight management</li>
+          <li>Appetite regulation</li>
+          <li>Recovery and tissue repair</li>
+          <li>Skin health and collagen production</li>
+          <li>Cognitive performance and focus</li>
+          <li>Energy production and mitochondrial function</li>
+          <li>Healthy ageing and longevity science</li>
+          <li>Body composition research</li>
+        </ul>
+        <p class="text-[#645c74] leading-relaxed mt-5">
+          As research continues to evolve, peptides remain one of the fastest-growing areas of modern biotechnology.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-2 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">How Do Peptides Work?</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Peptides act as biological messengers.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Different peptides interact with different receptors and signalling pathways throughout the body.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Researchers study these interactions to better understand how certain biological processes may be influenced and regulated.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          Every peptide has a unique structure and is therefore researched for different purposes.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">Why Don't Major Pharmaceutical Companies Sell Every Research Peptide?</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          This is one of the most common questions people ask.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          The simple answer is that many peptides remain investigational compounds and have not completed the extensive approval processes required for widespread pharmaceutical use.
+        </p>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Developing a new medicine can take many years and cost hundreds of millions, or even billions, of pounds. Before a pharmaceutical company can market a product as a medicine, it must undergo extensive clinical testing to demonstrate safety, quality, and effectiveness.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          While some peptides have successfully completed this process and become approved medicines, many others remain in the research stage.
+          Scientists continue to investigate these compounds to better understand their biological effects and potential future applications.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-1 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-6">Categories Of Peptide Research</h2>
+
+        <div class="space-y-6">
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Metabolic &amp; Weight Management Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              These compounds are being researched for their effects on appetite regulation, metabolic health, blood sugar control, energy balance, and body composition.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> Tirzepatide, Semaglutide, Retatrutide, AOD-9604</p>
           </div>
-        </article>
-      {% empty %}
-        <div class="reveal reveal-delay-1 bg-white border border-[#ece5f5] rounded-2xl p-6 text-center text-[#645c74]">
-          No certificates available yet.
+
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Recovery &amp; Healing Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              These peptides are being studied for their involvement in tissue repair, recovery pathways, and cellular regeneration.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> BPC-157, TB-500</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Growth Hormone &amp; Body Composition Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              Researchers investigate these compounds for their interaction with growth hormone pathways and body composition.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> Tesamorelin, CJC-1295 (No DAC), Ipamorelin, Sermorelin, IGF-1 LR3</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Skin, Aesthetics &amp; Pigmentation Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              These compounds are being researched for their potential role in skin quality, collagen production, hair growth, wound healing, and pigmentation pathways.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> GHK-Cu, Melanotan II</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Cognitive &amp; Nootropic Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              Scientists study these compounds for their potential effects on focus, learning, memory, concentration, and neurological pathways.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> Semax, Selank</p>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-2xl mb-2">Longevity &amp; Cellular Energy Research</h3>
+            <p class="text-[#645c74] leading-relaxed mb-2">
+              Researchers investigate these compounds for their involvement in mitochondrial function, cellular energy production, metabolism, and healthy ageing.
+            </p>
+            <p class="text-[#645c74]"><span class="font-semibold text-lltext">Examples:</span> MOTS-c, NAD+</p>
+          </div>
         </div>
-      {% endfor %}
-    </div>
+      </article>
+
+      <article class="reveal reveal-delay-2 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">Understanding Product Purity</h2>
+        <p class="text-[#645c74] leading-relaxed mb-3">When conducting research, quality and purity are essential.</p>
+        <p class="text-[#645c74] leading-relaxed mb-3">Many researchers look for:</p>
+        <ul class="list-disc pl-6 text-[#645c74] space-y-1 mb-5">
+          <li>Independent third-party testing</li>
+          <li>Certificates of Analysis (COAs)</li>
+          <li>Batch verification</li>
+          <li>High purity standards</li>
+          <li>Appropriate storage and handling</li>
+        </ul>
+        <p class="text-[#645c74] leading-relaxed">
+          LightLab provides Certificates of Analysis for all products upon request.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-0 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">What Is A Certificate Of Analysis (COA)?</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          A Certificate of Analysis, often referred to as a COA, is an independent laboratory report used to verify the identity and purity of a product.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          COAs provide transparency and help researchers understand the quality standards of the products they are working with.
+        </p>
+      </article>
+
+
+      <article class="reveal reveal-delay-2 bg-white border border-[#ece5f5] border-t-4 border-t-llprimary/40 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition duration-300">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">The Future Of Peptide Research</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          Peptide science continues to evolve at a remarkable pace.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          As research expands, scientists are exploring new ways peptides may help improve our understanding of metabolism, ageing, recovery, cognition, cellular health, and overall biological function.
+          Many experts believe peptide research will remain one of the most exciting areas of biotechnology throughout the coming decade.
+        </p>
+      </article>
+
+      <article class="reveal reveal-delay-2 bg-gradient-to-br from-[#f9f6ff] to-[#ffffff] border border-[#e8e0f2] rounded-2xl p-6 sm:p-8 shadow-sm">
+        <h2 class="font-heading text-3xl sm:text-4xl mb-4">Educational Disclaimer</h2>
+        <p class="text-[#645c74] leading-relaxed mb-4">
+          The information provided on this website is intended for educational and informational purposes only.
+        </p>
+        <p class="text-[#645c74] leading-relaxed">
+          All products supplied by LightLab are intended strictly for research and educational purposes only.
+          They are not intended for human consumption, medical use, diagnosis, treatment, cure, or prevention of any disease.
+          Nothing on this website should be interpreted as medical advice, treatment recommendations, or healthcare guidance.
+        </p>
+      </article>
+    </section>
   </main>
     <script src="{% static 'js/site.js' %}" defer></script>
     <script src="https://unpkg.com/lucide@latest"></script>
