@@ -16,6 +16,7 @@ class Product(models.Model):
     )
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    is_accessory = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

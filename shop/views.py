@@ -7,6 +7,9 @@ from django.conf import settings
 from django.db import IntegrityError, transaction
 
 
+RESEARCH_SUPPLY_BUNDLE_NAME = "Research Supply Bundle"
+
+
 # Homepage view: loads products and renders the one-page storefront.
 def home(request):
     all_products = Product.objects.filter(is_active=True)
@@ -25,11 +28,30 @@ def home(request):
 # Full shop page view.
 def shop(request):
     products = Product.objects.filter(is_active=True).prefetch_related("variants")
+    featured_bundle = products.filter(name__iexact=RESEARCH_SUPPLY_BUNDLE_NAME).first()
+    featured_bundle_variant = None
+    if featured_bundle:
+        featured_bundle_variant = (
+            featured_bundle.variants.filter(is_active=True).order_by("price", "id").first()
+        )
+
+    core_products = products.filter(is_accessory=False)
+    accessory_products = products.filter(is_accessory=True)
+
+    if featured_bundle:
+        core_products = core_products.exclude(pk=featured_bundle.pk)
+        accessory_products = accessory_products.exclude(pk=featured_bundle.pk)
+
     return render(
         request,
         "shop.html",
         {
             "products": products,
+            "total_products": products.count(),
+            "featured_bundle": featured_bundle,
+            "featured_bundle_variant": featured_bundle_variant,
+            "core_products": core_products,
+            "accessory_products": accessory_products,
         },
     )
 
@@ -278,6 +300,30 @@ def create_order(request):
             quantity=quantity,
             line_total=line_total,
         )
+
+    include_bundle = request.POST.get("include_research_bundle") in {"1", "true", "True", "on"}
+    if include_bundle:
+        bundle_variant = (
+            ProductVariant.objects.select_related("product")
+            .filter(
+                product__name__iexact=RESEARCH_SUPPLY_BUNDLE_NAME,
+                product__is_active=True,
+                is_active=True,
+            )
+            .order_by("price", "id")
+            .first()
+        )
+        if bundle_variant:
+            bundle_line_total = Decimal(bundle_variant.price)
+            subtotal += bundle_line_total
+            OrderItem.objects.create(
+                order=order,
+                product=bundle_variant.product,
+                variant=bundle_variant,
+                unit_price=bundle_variant.price,
+                quantity=1,
+                line_total=bundle_line_total,
+            )
 
     tax = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
     total = (subtotal + tax).quantize(Decimal("0.01"))
