@@ -48,20 +48,29 @@ document.addEventListener("DOMContentLoaded", () => {
   faqToggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
       const answer = toggle.nextElementSibling;
-      const arrow = toggle.querySelector("i");
+      if (!answer) return;
+
+      const arrow = toggle.querySelector("svg, i");
       const isExpanded = toggle.getAttribute("aria-expanded") === "true";
 
       faqToggles.forEach((otherToggle) => {
         if (otherToggle !== toggle) {
           otherToggle.setAttribute("aria-expanded", "false");
-          otherToggle.nextElementSibling.classList.add("hidden");
-          otherToggle.querySelector("i").style.transform = "rotate(0deg)";
+
+          const otherAnswer = otherToggle.nextElementSibling;
+          if (otherAnswer) otherAnswer.classList.add("hidden");
+
+          const otherArrow = otherToggle.querySelector("svg, i");
+          if (otherArrow) otherArrow.style.transform = "rotate(0deg)";
         }
       });
 
       toggle.setAttribute("aria-expanded", String(!isExpanded));
       answer.classList.toggle("hidden");
-      arrow.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
+
+      if (arrow) {
+        arrow.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
+      }
     });
   });
 
