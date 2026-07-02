@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <img src="/static/img/lightlablogo.jpg" alt="LightLab logo" class="age-gate__logo">
         </div>
         <p class="age-gate__eyebrow">18+ Only</p>
-        <h2 id="age-gate-title" class="age-gate__title">Enter LightLabs</h2>
+        <h2 id="age-gate-title" class="age-gate__title">Enter LightLab</h2>
         <p class="age-gate__text">
           This website contains age-restricted Products.
           Research Purposes only. You must be 18 or over to enter.
