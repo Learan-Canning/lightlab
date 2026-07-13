@@ -306,3 +306,11 @@ box-shadow:
     transition: none !important;
   }
 }
+
+/* Shop-only reveal fallback:
+   prevents cards from staying hidden if IntersectionObserver misses */
+.shop-page .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
