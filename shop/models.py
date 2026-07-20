@@ -35,6 +35,7 @@ class ProductVariant(models.Model):
     strength = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     is_active = models.BooleanField(default=True)
+    qty_in_stock = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ["product__name", "price", "strength"]

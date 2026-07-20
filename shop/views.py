@@ -5,9 +5,23 @@ from django.contrib import messages
 from decimal import Decimal
 from django.conf import settings
 from django.db import IntegrityError, transaction
+from django.db.models import Case, IntegerField, Value, When, F
 
 
-RESEARCH_SUPPLY_BUNDLE_NAME = "Research Supply Bundle"
+PINNED_ACCESSORY_NAMES = [
+    "10ml BAC Water 0.9% Benz",
+    "10ml Bacteriostatic Water (Non-Alcohol)",
+]
+
+
+def _is_stock_tracked(variant):
+    return variant.qty_in_stock is not None
+
+
+def _is_variant_in_stock(variant):
+    if not _is_stock_tracked(variant):
+        return True
+    return variant.qty_in_stock > 0
 
 
 # Homepage view: loads products and renders the one-page storefront.
@@ -28,19 +42,19 @@ def home(request):
 # Full shop page view.
 def shop(request):
     products = Product.objects.filter(is_active=True).prefetch_related("variants")
-    featured_bundle = products.filter(name__iexact=RESEARCH_SUPPLY_BUNDLE_NAME).first()
-    featured_bundle_variant = None
-    if featured_bundle:
-        featured_bundle_variant = (
-            featured_bundle.variants.filter(is_active=True).order_by("price", "id").first()
+    core_products = products.filter(is_accessory=False).order_by("name")
+    accessory_products = (
+        products.filter(is_accessory=True)
+        .annotate(
+            display_priority=Case(
+                When(name__iexact=PINNED_ACCESSORY_NAMES[0], then=Value(0)),
+                When(name__iexact=PINNED_ACCESSORY_NAMES[1], then=Value(1)),
+                default=Value(2),
+                output_field=IntegerField(),
+            )
         )
-
-    core_products = products.filter(is_accessory=False)
-    accessory_products = products.filter(is_accessory=True)
-
-    if featured_bundle:
-        core_products = core_products.exclude(pk=featured_bundle.pk)
-        accessory_products = accessory_products.exclude(pk=featured_bundle.pk)
+        .order_by("display_priority", "name")
+    )
 
     return render(
         request,
@@ -48,8 +62,6 @@ def shop(request):
         {
             "products": products,
             "total_products": products.count(),
-            "featured_bundle": featured_bundle,
-            "featured_bundle_variant": featured_bundle_variant,
             "core_products": core_products,
             "accessory_products": accessory_products,
         },
@@ -159,7 +171,13 @@ def contact(request):
 def add_to_cart(request):
     if request.method == "POST":
         variant_id = request.POST.get("variant_id")
-        quantity = int(request.POST.get("quantity", 1))
+        try:
+            quantity = int(request.POST.get("quantity", 1))
+        except (TypeError, ValueError):
+            quantity = 1
+
+        if quantity < 1:
+            quantity = 1
 
         if not variant_id:
             messages.error(request, "Please choose a bottle strength.")
@@ -175,16 +193,22 @@ def add_to_cart(request):
             messages.error(request, "That bottle option is no longer available.")
             return redirect(request.POST.get("next", "shop"))
 
+        if not _is_variant_in_stock(variant):
+            messages.error(request, "That bottle option is currently out of stock.")
+            return redirect(request.POST.get("next", "shop"))
+
         if "cart" not in request.session:
             request.session["cart"] = {}
 
         cart = request.session["cart"]
         cart_key = str(variant.id)
 
-        if cart_key in cart:
-            cart[cart_key] += quantity
-        else:
-            cart[cart_key] = quantity
+        requested_quantity = quantity + int(cart.get(cart_key, 0))
+        if _is_stock_tracked(variant) and requested_quantity > variant.qty_in_stock:
+            messages.error(request, f"Only {variant.qty_in_stock} available for {variant.product.name} {variant.strength}.")
+            return redirect(request.POST.get("next", "shop"))
+
+        cart[cart_key] = requested_quantity
 
         request.session.modified = True
         messages.success(request, f"{variant.product.name} {variant.strength} added to cart!")
@@ -196,12 +220,29 @@ def add_to_cart(request):
 def cart(request):
     cart_data = request.session.get("cart", {})
     cart_items = []
-    subtotal = 0
+    subtotal = Decimal("0.00")
 
     for variant_id, quantity in list(cart_data.items()):
         try:
-            variant = ProductVariant.objects.select_related("product").get(id=int(variant_id))
-            item_total = float(variant.price) * quantity
+            variant = ProductVariant.objects.select_related("product").get(
+                id=int(variant_id),
+                is_active=True,
+                product__is_active=True,
+            )
+
+            if not _is_variant_in_stock(variant):
+                del cart_data[variant_id]
+                continue
+
+            if _is_stock_tracked(variant) and quantity > variant.qty_in_stock:
+                quantity = variant.qty_in_stock
+                if quantity < 1:
+                    del cart_data[variant_id]
+                    continue
+                cart_data[variant_id] = quantity
+                messages.info(request, f"Updated {variant.product.name} {variant.strength} to available stock ({quantity}).")
+
+            item_total = Decimal(variant.price) * Decimal(quantity)
             subtotal += item_total
 
             cart_items.append({
@@ -213,8 +254,8 @@ def cart(request):
         except ProductVariant.DoesNotExist:
             del cart_data[variant_id]
 
-    tax = subtotal * 0.10
-    total = subtotal + tax
+    tax = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
+    total = (subtotal + tax).quantize(Decimal("0.01"))
 
     request.session["cart"] = cart_data
     request.session.modified = True
@@ -269,66 +310,72 @@ def create_order(request):
                     postcode=postcode,
                     country=country,
                 )
+
+                subtotal = Decimal("0.00")
+                created_items = 0
+
+                for variant_id, qty in cart.items():
+                    try:
+                        variant = ProductVariant.objects.select_for_update().select_related("product").get(
+                            pk=int(variant_id),
+                            is_active=True,
+                            product__is_active=True,
+                        )
+                    except ProductVariant.DoesNotExist:
+                        raise ValueError("One or more cart items are no longer available. Please review your cart.")
+
+                    try:
+                        quantity = int(qty)
+                    except (TypeError, ValueError):
+                        quantity = 1
+
+                    if quantity < 1:
+                        raise ValueError("One or more cart quantities are invalid. Please review your cart.")
+
+                    if _is_stock_tracked(variant):
+                        if variant.qty_in_stock < 1:
+                            raise ValueError(f"{variant.product.name} {variant.strength} is out of stock.")
+                        if quantity > variant.qty_in_stock:
+                            raise ValueError(
+                                f"Only {variant.qty_in_stock} available for {variant.product.name} {variant.strength}."
+                            )
+
+                    unit_price = variant.price
+                    line_total = Decimal(unit_price) * Decimal(quantity)
+                    subtotal += line_total
+                    created_items += 1
+
+                    OrderItem.objects.create(
+                        order=order,
+                        product=variant.product,
+                        variant=variant,
+                        unit_price=unit_price,
+                        quantity=quantity,
+                        line_total=line_total,
+                    )
+
+                    if _is_stock_tracked(variant):
+                        ProductVariant.objects.filter(pk=variant.pk).update(
+                            qty_in_stock=F("qty_in_stock") - quantity
+                        )
+
+                if created_items == 0:
+                    raise ValueError("No valid items were found in your cart.")
+
+                tax = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
+                total = (subtotal + tax).quantize(Decimal("0.01"))
+                order.total_amount = total
+                order.save(update_fields=["total_amount"])
+
             break
         except IntegrityError:
             order = None
             if attempt == 4:
                 messages.error(request, "Could not create order. Please try again.")
                 return redirect("cart")
-
-    subtotal = Decimal("0.00")
-    for variant_id, qty in cart.items():
-        try:
-            variant = ProductVariant.objects.select_related("product").get(
-                pk=int(variant_id),
-                is_active=True,
-                product__is_active=True,
-            )
-        except ProductVariant.DoesNotExist:
-            continue
-
-        unit_price = variant.price
-        quantity = int(qty)
-        line_total = Decimal(unit_price) * quantity
-        subtotal += line_total
-
-        OrderItem.objects.create(
-            order=order,
-            product=variant.product,
-            variant=variant,
-            unit_price=unit_price,
-            quantity=quantity,
-            line_total=line_total,
-        )
-
-    include_bundle = request.POST.get("include_research_bundle") in {"1", "true", "True", "on"}
-    if include_bundle:
-        bundle_variant = (
-            ProductVariant.objects.select_related("product")
-            .filter(
-                product__name__iexact=RESEARCH_SUPPLY_BUNDLE_NAME,
-                product__is_active=True,
-                is_active=True,
-            )
-            .order_by("price", "id")
-            .first()
-        )
-        if bundle_variant:
-            bundle_line_total = Decimal(bundle_variant.price)
-            subtotal += bundle_line_total
-            OrderItem.objects.create(
-                order=order,
-                product=bundle_variant.product,
-                variant=bundle_variant,
-                unit_price=bundle_variant.price,
-                quantity=1,
-                line_total=bundle_line_total,
-            )
-
-    tax = (subtotal * Decimal("0.10")).quantize(Decimal("0.01"))
-    total = (subtotal + tax).quantize(Decimal("0.01"))
-    order.total_amount = total
-    order.save()
+        except ValueError as exc:
+            messages.error(request, str(exc))
+            return redirect("cart")
 
     request.session["cart"] = {}
     request.session.modified = True
@@ -426,6 +473,27 @@ def update_cart(request):
         cart_data = request.session.get("cart", {})
 
         if variant_id in cart_data:
+            try:
+                variant = ProductVariant.objects.get(pk=int(variant_id), is_active=True, product__is_active=True)
+            except ProductVariant.DoesNotExist:
+                del cart_data[variant_id]
+                request.session["cart"] = cart_data
+                request.session.modified = True
+                messages.error(request, "That item is no longer available.")
+                return redirect("cart")
+
+            if _is_stock_tracked(variant):
+                if variant.qty_in_stock < 1:
+                    del cart_data[variant_id]
+                    request.session["cart"] = cart_data
+                    request.session.modified = True
+                    messages.error(request, f"{variant.product.name} {variant.strength} is out of stock.")
+                    return redirect("cart")
+
+                if quantity > variant.qty_in_stock:
+                    quantity = variant.qty_in_stock
+                    messages.info(request, f"Quantity adjusted to available stock ({quantity}).")
+
             cart_data[variant_id] = quantity
             request.session["cart"] = cart_data
             request.session.modified = True
@@ -446,6 +514,8 @@ def remove_from_cart(request):
             messages.success(request, "Item removed from cart.")
 
     return redirect("cart")
+
+
 
 
 

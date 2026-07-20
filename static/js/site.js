@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuBtn = document.getElementById("menuBtn");
   const mobileMenu = document.getElementById("mobileMenu");
   let revealInitialized = false;
+  const whatsappNumber = "447522069867";
 
   const initializeRevealObserver = () => {
     if (revealInitialized) return;
@@ -73,6 +74,41 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  const selectFirstAvailableVariant = () => {
+    const forms = document.querySelectorAll(".js-variant-form");
+    forms.forEach((form) => {
+      const checked = form.querySelector(".js-variant-radio:checked:not(:disabled)");
+      if (checked) return;
+
+      const firstAvailable = form.querySelector(".js-variant-radio:not(:disabled)");
+      if (firstAvailable) {
+        firstAvailable.checked = true;
+      }
+    });
+  };
+
+  const addWhatsAppFloat = () => {
+    if (document.querySelector(".whatsapp-float")) return;
+
+    const link = document.createElement("a");
+    link.href = `https://wa.me/${whatsappNumber}`;
+    link.className = "whatsapp-float";
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", "Need help? Contact us on WhatsApp");
+    link.innerHTML = `
+      <span class="whatsapp-float__icon" aria-hidden="true">
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+      </span>
+      <span class="whatsapp-float__text">Need help? Contact us on WhatsApp</span>
+    `;
+
+    document.body.appendChild(link);
+  };
+
+  selectFirstAvailableVariant();
+  addWhatsAppFloat();
 
   // Age gate logic
 

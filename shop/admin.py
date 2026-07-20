@@ -5,7 +5,7 @@ from .models import Order, OrderItem, Product, ProductVariant
 class ProductVariantInline(admin.TabularInline):
     model = ProductVariant
     extra = 1
-    fields = ("strength", "price", "is_active")
+    fields = ("strength", "price", "qty_in_stock", "is_active")
 
 
 @admin.register(Product)
@@ -18,7 +18,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductVariant)
 class ProductVariantAdmin(admin.ModelAdmin):
-    list_display = ("product", "strength", "price", "is_active")
+    list_display = ("product", "strength", "price", "qty_in_stock", "is_active")
     search_fields = ("product__name", "strength")
     list_filter = ("is_active",)
 
