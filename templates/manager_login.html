@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manager Login - LightLab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            llbg: "#f9f8fc",
+            lltext: "#1f1b29",
+            llprimary: "#a987d8",
+            llprimaryDark: "#926fc8"
+          },
+          fontFamily: {
+            heading: ["Cormorant Garamond", "serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+</head>
+
+<body class="bg-llbg text-lltext font-body min-h-screen antialiased">
+  <main class="min-h-screen flex items-center justify-center px-4 py-12">
+    <section class="w-full max-w-md rounded-3xl border border-[#e7dff1] bg-white/90 backdrop-blur p-8 sm:p-10 shadow-[0_20px_60px_rgba(31,27,41,0.12)]">
+      <div class="text-center mb-8">
+        <p class="text-xs font-semibold tracking-[0.28em] uppercase text-llprimary mb-2">LightLab Manager</p>
+        <h1 class="font-heading text-4xl sm:text-5xl leading-tight">Welcome Back</h1>
+        <p class="text-sm text-[#645c74] mt-3">Secure client dashboard access.</p>
+      </div>
+
+      {% if messages %}
+        <div class="space-y-2 mb-5">
+          {% for message in messages %}
+            <div class="rounded-xl border px-4 py-3 text-sm {% if message.tags == 'success' %}bg-[#ebf8ef] border-[#c6ebd3] text-[#1f6a3f]{% else %}bg-[#fff3f4] border-[#ffd6da] text-[#8a2b3b]{% endif %}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        <div>
+          <label for="username" class="block text-sm font-semibold mb-2">Username</label>
+          <input id="username" name="username" required class="w-full rounded-xl border border-[#ddd2ec] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-llprimary" />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-semibold mb-2">Password</label>
+          <input id="password" name="password" type="password" required class="w-full rounded-xl border border-[#ddd2ec] px-4 py-3 focus:outline-none focus:ring-2 focus:ring-llprimary" />
+        </div>
+
+        <button type="submit" class="w-full rounded-full bg-llprimary text-white py-3.5 font-semibold hover:bg-llprimaryDark transition">
+          Log In
+        </button>
+      </form>
+
+      <p class="text-xs text-[#8b829b] text-center mt-5">For staff and manager accounts only.</p>
+    </section>
+  </main>
+
+  <script src="{% static 'js/site.js' %}" defer></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

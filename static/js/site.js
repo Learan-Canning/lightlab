@@ -107,8 +107,43 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(link);
   };
 
+  const initializeShopSearch = () => {
+    const searchInput = document.getElementById("shopSearchInput");
+    if (!searchInput) return;
+
+    const cards = Array.from(document.querySelectorAll(".js-shop-card"));
+    const countEl = document.getElementById("shopProductCount");
+    const noResultsEl = document.getElementById("shopNoResults");
+
+    const updateCount = (visibleCount) => {
+      if (!countEl) return;
+      countEl.textContent = `${visibleCount} product${visibleCount === 1 ? "" : "s"}`;
+    };
+
+    const applySearch = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const haystack = card.dataset.search || "";
+        const matched = !query || haystack.includes(query);
+        card.style.display = matched ? "" : "none";
+        if (matched) visibleCount += 1;
+      });
+
+      updateCount(visibleCount);
+      if (noResultsEl) {
+        noResultsEl.classList.toggle("hidden", visibleCount > 0);
+      }
+    };
+
+    searchInput.addEventListener("input", applySearch);
+    applySearch();
+  };
+
   selectFirstAvailableVariant();
   addWhatsAppFloat();
+  initializeShopSearch();
 
   // Age gate logic
 

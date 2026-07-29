@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect
 from .models import Product, Order, OrderItem, ProductVariant, _generate_reference
 from django.core.mail import send_mail
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.db.models import Case, IntegerField, Value, When, F
+from django.http import HttpResponseForbidden
 
 
 PINNED_ACCESSORY_NAMES = [
@@ -514,6 +517,89 @@ def remove_from_cart(request):
             messages.success(request, "Item removed from cart.")
 
     return redirect("cart")
+
+
+def manager_login(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect("manager_dashboard")
+
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+
+        user = authenticate(request, username=username, password=password)
+        if user is None:
+            messages.error(request, "Invalid username or password.")
+            return redirect("manager_login")
+
+        if not user.is_staff:
+            messages.error(request, "This account does not have manager access.")
+            return redirect("manager_login")
+
+        login(request, user)
+        messages.success(request, "Welcome back.")
+        return redirect("manager_dashboard")
+
+    return render(request, "manager_login.html")
+
+
+@login_required
+def manager_logout(request):
+    logout(request)
+    messages.info(request, "You have been logged out.")
+    return redirect("manager_login")
+
+
+@login_required
+def manager_dashboard(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Manager access only.")
+
+    if request.method == "POST":
+        action = request.POST.get("action", "").strip()
+
+        if action == "update_stock":
+            try:
+                variant_id = int(request.POST.get("variant_id", ""))
+                qty_in_stock = int(request.POST.get("qty_in_stock", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Please enter a valid stock number.")
+                return redirect("manager_dashboard")
+
+            if qty_in_stock < 0:
+                messages.error(request, "Stock cannot be negative.")
+                return redirect("manager_dashboard")
+
+            variant = ProductVariant.objects.select_related("product").filter(pk=variant_id).first()
+            if not variant:
+                messages.error(request, "Variant not found.")
+                return redirect("manager_dashboard")
+
+            variant.qty_in_stock = qty_in_stock
+            variant.save(update_fields=["qty_in_stock"])
+            messages.success(request, f"Updated stock for {variant.product.name} {variant.strength}.")
+            return redirect("manager_dashboard")
+
+    tracked_variants = (
+        ProductVariant.objects.select_related("product")
+        .filter(product__is_active=True, is_active=True, qty_in_stock__isnull=False)
+        .order_by("qty_in_stock", "product__name", "strength")
+    )
+
+    low_stock_variants = tracked_variants.filter(qty_in_stock__gt=0, qty_in_stock__lte=3)
+    out_of_stock_variants = tracked_variants.filter(qty_in_stock=0)
+
+    context = {
+        "product_count": Product.objects.filter(is_active=True).count(),
+        "tracked_variant_count": tracked_variants.count(),
+        "low_stock_count": low_stock_variants.count(),
+        "out_of_stock_count": out_of_stock_variants.count(),
+        "pending_order_count": Order.objects.filter(status=Order.STATUS_PENDING).count(),
+        "low_stock_variants": low_stock_variants,
+        "out_of_stock_variants": out_of_stock_variants,
+        "tracked_variants": tracked_variants[:100],
+    }
+    return render(request, "manager_dashboard.html", context)
 
 
 
