@@ -557,6 +557,24 @@ def manager_dashboard(request):
 
     valid_statuses = {choice[0] for choice in Order.STATUS_CHOICES}
 
+    def _parse_price(raw_value):
+        value = (raw_value or "").strip()
+        if not value:
+            raise ValueError("Price is required.")
+        price = Decimal(value)
+        if price < 0:
+            raise ValueError("Price cannot be negative.")
+        return price
+
+    def _parse_optional_stock(raw_value):
+        value = (raw_value or "").strip()
+        if value == "":
+            return None
+        qty = int(value)
+        if qty < 0:
+            raise ValueError("Stock cannot be negative.")
+        return qty
+
     if request.method == "POST":
         action = request.POST.get("action", "").strip()
 
@@ -607,6 +625,187 @@ def manager_dashboard(request):
             )
             return redirect("manager_dashboard")
 
+        if action == "create_product":
+            name = request.POST.get("name", "").strip()
+            description = request.POST.get("description", "").strip()
+            image = request.FILES.get("image")
+
+            if not name:
+                messages.error(request, "Product name is required.")
+                return redirect("manager_dashboard")
+
+            try:
+                price = _parse_price(request.POST.get("price", ""))
+            except (ArithmeticError, ValueError):
+                messages.error(request, "Please enter a valid product price.")
+                return redirect("manager_dashboard")
+
+            product = Product.objects.create(
+                name=name,
+                price=price,
+                description=description,
+                is_active=(request.POST.get("is_active") == "on"),
+                is_accessory=(request.POST.get("is_accessory") == "on"),
+                image=image,
+            )
+            messages.success(request, f"Created product {product.name}.")
+            return redirect("manager_dashboard")
+
+        if action == "update_product":
+            try:
+                product_id = int(request.POST.get("product_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Product selection is invalid.")
+                return redirect("manager_dashboard")
+
+            product = Product.objects.filter(pk=product_id).first()
+            if not product:
+                messages.error(request, "Product not found.")
+                return redirect("manager_dashboard")
+
+            name = request.POST.get("name", "").strip()
+            description = request.POST.get("description", "").strip()
+            image = request.FILES.get("image")
+
+            if not name:
+                messages.error(request, "Product name is required.")
+                return redirect("manager_dashboard")
+
+            try:
+                price = _parse_price(request.POST.get("price", ""))
+            except (ArithmeticError, ValueError):
+                messages.error(request, "Please enter a valid product price.")
+                return redirect("manager_dashboard")
+
+            product.name = name
+            product.price = price
+            product.description = description
+            product.is_active = request.POST.get("is_active") == "on"
+            product.is_accessory = request.POST.get("is_accessory") == "on"
+
+            if request.POST.get("clear_image") == "1":
+                product.image = None
+            if image:
+                product.image = image
+
+            product.save()
+            messages.success(request, f"Updated product {product.name}.")
+            return redirect("manager_dashboard")
+
+        if action == "delete_product":
+            try:
+                product_id = int(request.POST.get("product_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Product selection is invalid.")
+                return redirect("manager_dashboard")
+
+            product = Product.objects.filter(pk=product_id).first()
+            if not product:
+                messages.error(request, "Product not found.")
+                return redirect("manager_dashboard")
+
+            product_name = product.name
+            product.delete()
+            messages.success(request, f"Deleted product {product_name}.")
+            return redirect("manager_dashboard")
+
+        if action == "create_variant":
+            try:
+                product_id = int(request.POST.get("product_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Product selection is invalid.")
+                return redirect("manager_dashboard")
+
+            product = Product.objects.filter(pk=product_id).first()
+            if not product:
+                messages.error(request, "Product not found.")
+                return redirect("manager_dashboard")
+
+            strength = request.POST.get("strength", "").strip()
+            if not strength:
+                messages.error(request, "Variant strength is required.")
+                return redirect("manager_dashboard")
+
+            try:
+                price = _parse_price(request.POST.get("price", ""))
+                qty_in_stock = _parse_optional_stock(request.POST.get("qty_in_stock", ""))
+            except (ArithmeticError, TypeError, ValueError):
+                messages.error(request, "Please enter valid variant price and stock values.")
+                return redirect("manager_dashboard")
+
+            try:
+                ProductVariant.objects.create(
+                    product=product,
+                    strength=strength,
+                    price=price,
+                    is_active=(request.POST.get("is_active") == "on"),
+                    qty_in_stock=qty_in_stock,
+                )
+            except IntegrityError:
+                messages.error(request, "That variant strength already exists for this product.")
+                return redirect("manager_dashboard")
+
+            messages.success(request, f"Created variant {product.name} {strength}.")
+            return redirect("manager_dashboard")
+
+        if action == "update_variant":
+            try:
+                variant_id = int(request.POST.get("variant_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Variant selection is invalid.")
+                return redirect("manager_dashboard")
+
+            variant = ProductVariant.objects.select_related("product").filter(pk=variant_id).first()
+            if not variant:
+                messages.error(request, "Variant not found.")
+                return redirect("manager_dashboard")
+
+            strength = request.POST.get("strength", "").strip()
+            if not strength:
+                messages.error(request, "Variant strength is required.")
+                return redirect("manager_dashboard")
+
+            try:
+                price = _parse_price(request.POST.get("price", ""))
+                qty_in_stock = _parse_optional_stock(request.POST.get("qty_in_stock", ""))
+            except (ArithmeticError, TypeError, ValueError):
+                messages.error(request, "Please enter valid variant price and stock values.")
+                return redirect("manager_dashboard")
+
+            variant.strength = strength
+            variant.price = price
+            variant.qty_in_stock = qty_in_stock
+            variant.is_active = request.POST.get("is_active") == "on"
+
+            try:
+                variant.save()
+            except IntegrityError:
+                messages.error(request, "That variant strength already exists for this product.")
+                return redirect("manager_dashboard")
+
+            messages.success(
+                request,
+                f"Updated variant {variant.product.name} {variant.strength}.",
+            )
+            return redirect("manager_dashboard")
+
+        if action == "delete_variant":
+            try:
+                variant_id = int(request.POST.get("variant_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Variant selection is invalid.")
+                return redirect("manager_dashboard")
+
+            variant = ProductVariant.objects.select_related("product").filter(pk=variant_id).first()
+            if not variant:
+                messages.error(request, "Variant not found.")
+                return redirect("manager_dashboard")
+
+            variant_name = f"{variant.product.name} {variant.strength}"
+            variant.delete()
+            messages.success(request, f"Deleted variant {variant_name}.")
+            return redirect("manager_dashboard")
+
     tracked_variants = (
         ProductVariant.objects.select_related("product")
         .filter(product__is_active=True, is_active=True, qty_in_stock__isnull=False)
@@ -621,6 +820,10 @@ def manager_dashboard(request):
     )
     paid_order_count = Order.objects.filter(status=Order.STATUS_PAID).count()
     cancelled_order_count = Order.objects.filter(status=Order.STATUS_CANCELLED).count()
+    manager_products = (
+        Product.objects.prefetch_related("variants")
+        .order_by("name")[:100]
+    )
 
     context = {
         "product_count": Product.objects.filter(is_active=True).count(),
@@ -635,6 +838,7 @@ def manager_dashboard(request):
         "tracked_variants": tracked_variants[:100],
         "recent_orders": recent_orders,
         "order_status_choices": Order.STATUS_CHOICES,
+        "manager_products": manager_products,
     }
     return render(request, "manager_dashboard.html", context)
 

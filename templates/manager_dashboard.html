@@ -123,6 +123,192 @@
       </article>
     </section>
 
+    <section>
+      <details class="group rounded-2xl border border-[#e7dff1] bg-white open:shadow-[0_18px_50px_rgba(31,27,41,0.10)]" open>
+        <summary class="list-none cursor-pointer px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-llprimary">Catalog</p>
+            <h2 class="font-heading text-3xl leading-none mt-1">Product Manager</h2>
+            <p class="text-sm text-[#706881] mt-2">Create, edit and remove products, images and variants.</p>
+          </div>
+          <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#f4eefb] text-llprimary transition group-open:rotate-180">⌄</span>
+        </summary>
+
+        <div class="px-5 pb-5 sm:px-6 sm:pb-6 space-y-5">
+          <article class="rounded-xl border border-[#efe8f8] bg-[#fcfaff] p-4 sm:p-5">
+            <h3 class="font-heading text-2xl">Create Product</h3>
+            <form method="post" enctype="multipart/form-data" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="create_product" />
+
+              <label class="block">
+                <span class="text-sm font-semibold">Name</span>
+                <input name="name" required class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+              </label>
+
+              <label class="block">
+                <span class="text-sm font-semibold">Base Price</span>
+                <input name="price" required type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="text-sm font-semibold">Description</span>
+                <textarea name="description" rows="3" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2"></textarea>
+              </label>
+
+              <label class="block md:col-span-2">
+                <span class="text-sm font-semibold">Product Image</span>
+                <input name="image" type="file" accept="image/*" class="mt-1 block w-full text-sm" />
+              </label>
+
+              <label class="inline-flex items-center gap-2 text-sm font-medium">
+                <input name="is_active" type="checkbox" checked class="rounded border-[#cdbce3]" />
+                Active
+              </label>
+
+              <label class="inline-flex items-center gap-2 text-sm font-medium">
+                <input name="is_accessory" type="checkbox" class="rounded border-[#cdbce3]" />
+                Accessory
+              </label>
+
+              <div class="md:col-span-2">
+                <button type="submit" class="rounded-full bg-llprimary text-white px-5 py-2.5 text-sm font-semibold hover:bg-llprimaryDark transition">Create Product</button>
+              </div>
+            </form>
+          </article>
+
+          <div class="space-y-4">
+            {% for product in manager_products %}
+              <article class="rounded-xl border border-[#efe8f8] bg-white p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <p class="font-semibold text-lg">{{ product.name }}</p>
+                    <p class="text-sm text-[#706881]">Base £{{ product.price }}{% if product.is_accessory %} • Accessory{% endif %}{% if not product.is_active %} • Inactive{% endif %}</p>
+                  </div>
+                  <form method="post" onsubmit="return confirm('Delete this product and all its variants?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete_product" />
+                    <input type="hidden" name="product_id" value="{{ product.id }}" />
+                    <button type="submit" class="rounded-full border border-[#f1c8d0] text-[#9b4a58] px-4 py-2 text-xs font-semibold hover:bg-[#fff3f5] transition">Delete Product</button>
+                  </form>
+                </div>
+
+                <form method="post" enctype="multipart/form-data" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="update_product" />
+                  <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+                  <label class="block">
+                    <span class="text-sm font-semibold">Name</span>
+                    <input name="name" value="{{ product.name }}" required class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                  </label>
+
+                  <label class="block">
+                    <span class="text-sm font-semibold">Base Price</span>
+                    <input name="price" value="{{ product.price }}" required type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                  </label>
+
+                  <label class="block md:col-span-2">
+                    <span class="text-sm font-semibold">Description</span>
+                    <textarea name="description" rows="3" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2">{{ product.description }}</textarea>
+                  </label>
+
+                  <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-3 items-end">
+                    <label class="block">
+                      <span class="text-sm font-semibold">Replace Image</span>
+                      <input name="image" type="file" accept="image/*" class="mt-1 block w-full text-sm" />
+                    </label>
+                    {% if product.image %}
+                      <label class="inline-flex items-center gap-2 text-sm font-medium">
+                        <input name="clear_image" type="checkbox" value="1" class="rounded border-[#cdbce3]" />
+                        Remove current image
+                      </label>
+                    {% endif %}
+                  </div>
+
+                  <label class="inline-flex items-center gap-2 text-sm font-medium">
+                    <input name="is_active" type="checkbox" {% if product.is_active %}checked{% endif %} class="rounded border-[#cdbce3]" />
+                    Active
+                  </label>
+
+                  <label class="inline-flex items-center gap-2 text-sm font-medium">
+                    <input name="is_accessory" type="checkbox" {% if product.is_accessory %}checked{% endif %} class="rounded border-[#cdbce3]" />
+                    Accessory
+                  </label>
+
+                  <div class="md:col-span-2">
+                    <button type="submit" class="rounded-full bg-llprimary text-white px-5 py-2.5 text-sm font-semibold hover:bg-llprimaryDark transition">Save Product</button>
+                  </div>
+                </form>
+
+                <div class="mt-5 pt-4 border-t border-[#f3edf9] space-y-3">
+                  <p class="text-xs font-semibold uppercase tracking-wider text-[#8b829b]">Variants</p>
+
+                  <form method="post" class="grid grid-cols-1 md:grid-cols-5 gap-2 items-end rounded-lg border border-[#efe8f8] p-3 bg-[#fffeff]">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create_variant" />
+                    <input type="hidden" name="product_id" value="{{ product.id }}" />
+                    <label class="block">
+                      <span class="text-xs font-semibold">Strength</span>
+                      <input name="strength" required class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                    </label>
+                    <label class="block">
+                      <span class="text-xs font-semibold">Price</span>
+                      <input name="price" required type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                    </label>
+                    <label class="block">
+                      <span class="text-xs font-semibold">Stock</span>
+                      <input name="qty_in_stock" type="number" min="0" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" placeholder="blank = untracked" />
+                    </label>
+                    <label class="inline-flex items-center gap-2 text-sm font-medium pb-2">
+                      <input name="is_active" type="checkbox" checked class="rounded border-[#cdbce3]" />
+                      Active
+                    </label>
+                    <button type="submit" class="rounded-full bg-llprimary text-white px-4 py-2 text-xs font-semibold hover:bg-llprimaryDark transition">Add Variant</button>
+                  </form>
+
+                  {% for variant in product.variants.all %}
+                    <form method="post" class="grid grid-cols-1 md:grid-cols-6 gap-2 items-end rounded-lg border border-[#f0eafa] p-3">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="update_variant" />
+                      <input type="hidden" name="variant_id" value="{{ variant.id }}" />
+                      <label class="block">
+                        <span class="text-xs font-semibold">Strength</span>
+                        <input name="strength" value="{{ variant.strength }}" required class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                      </label>
+                      <label class="block">
+                        <span class="text-xs font-semibold">Price</span>
+                        <input name="price" value="{{ variant.price }}" required type="number" min="0" step="0.01" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                      </label>
+                      <label class="block">
+                        <span class="text-xs font-semibold">Stock</span>
+                        <input name="qty_in_stock" value="{{ variant.qty_in_stock|default_if_none:'' }}" type="number" min="0" class="mt-1 w-full rounded-lg border border-[#ddd2ec] px-3 py-2" />
+                      </label>
+                      <label class="inline-flex items-center gap-2 text-sm font-medium pb-2">
+                        <input name="is_active" type="checkbox" {% if variant.is_active %}checked{% endif %} class="rounded border-[#cdbce3]" />
+                        Active
+                      </label>
+                      <button type="submit" class="rounded-full bg-llprimary text-white px-4 py-2 text-xs font-semibold hover:bg-llprimaryDark transition">Save</button>
+                    </form>
+                    <form method="post" class="-mt-1" onsubmit="return confirm('Delete this variant?');">
+                      {% csrf_token %}
+                      <input type="hidden" name="action" value="delete_variant" />
+                      <input type="hidden" name="variant_id" value="{{ variant.id }}" />
+                      <button type="submit" class="rounded-full border border-[#f1c8d0] text-[#9b4a58] px-4 py-1.5 text-xs font-semibold hover:bg-[#fff3f5] transition">Delete Variant</button>
+                    </form>
+                  {% empty %}
+                    <p class="text-sm text-[#706881]">No variants yet.</p>
+                  {% endfor %}
+                </div>
+              </article>
+            {% empty %}
+              <p class="text-sm text-[#706881]">No products available yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </details>
+    </section>
+
     <section class="space-y-4">
       <details class="group rounded-2xl border border-[#e7dff1] bg-white open:shadow-[0_18px_50px_rgba(31,27,41,0.10)]" open>
         <summary class="list-none cursor-pointer px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4">
