@@ -124,7 +124,7 @@
     </section>
 
     <section>
-      <details class="group rounded-2xl border border-[#e7dff1] bg-white open:shadow-[0_18px_50px_rgba(31,27,41,0.10)]" open>
+      <details class="group rounded-2xl border border-[#e7dff1] bg-white open:shadow-[0_18px_50px_rgba(31,27,41,0.10)]">
         <summary class="list-none cursor-pointer px-5 py-4 sm:px-6 sm:py-5 flex items-center justify-between gap-4">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.22em] text-llprimary">Catalog</p>
@@ -135,7 +135,7 @@
         </summary>
 
         <div class="px-5 pb-5 sm:px-6 sm:pb-6 space-y-5">
-          <details class="group rounded-xl border border-[#efe8f8] bg-[#fcfaff]" open>
+          <details class="group rounded-xl border border-[#efe8f8] bg-[#fcfaff]">
             <summary class="list-none cursor-pointer px-4 py-4 sm:px-5 flex items-center justify-between gap-3">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.18em] text-llprimary">Quick Action</p>
@@ -185,9 +185,10 @@
             </div>
           </details>
 
-          <div class="space-y-4">
+          <div class="space-y-3">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#8b829b]">Products List (tap a product to edit)</p>
             {% for product in manager_products %}
-              <details class="group rounded-xl border border-[#efe8f8] bg-white" open>
+              <details class="group rounded-xl border border-[#efe8f8] bg-white">
                 <summary class="list-none cursor-pointer px-4 py-4 sm:px-5 flex items-center justify-between gap-3">
                   <div>
                     <p class="font-semibold text-lg">{{ product.name }}</p>
