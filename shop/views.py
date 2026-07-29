@@ -555,6 +555,8 @@ def manager_dashboard(request):
     if not request.user.is_staff:
         return HttpResponseForbidden("Manager access only.")
 
+    valid_statuses = {choice[0] for choice in Order.STATUS_CHOICES}
+
     if request.method == "POST":
         action = request.POST.get("action", "").strip()
 
@@ -580,6 +582,31 @@ def manager_dashboard(request):
             messages.success(request, f"Updated stock for {variant.product.name} {variant.strength}.")
             return redirect("manager_dashboard")
 
+        if action == "update_order_status":
+            try:
+                order_id = int(request.POST.get("order_id", ""))
+            except (TypeError, ValueError):
+                messages.error(request, "Order selection is invalid.")
+                return redirect("manager_dashboard")
+
+            new_status = request.POST.get("status", "").strip().lower()
+            if new_status not in valid_statuses:
+                messages.error(request, "Order status is invalid.")
+                return redirect("manager_dashboard")
+
+            order = Order.objects.filter(pk=order_id).first()
+            if not order:
+                messages.error(request, "Order not found.")
+                return redirect("manager_dashboard")
+
+            order.status = new_status
+            order.save(update_fields=["status"])
+            messages.success(
+                request,
+                f"Order {order.reference} marked as {order.get_status_display()}.",
+            )
+            return redirect("manager_dashboard")
+
     tracked_variants = (
         ProductVariant.objects.select_related("product")
         .filter(product__is_active=True, is_active=True, qty_in_stock__isnull=False)
@@ -588,6 +615,12 @@ def manager_dashboard(request):
 
     low_stock_variants = tracked_variants.filter(qty_in_stock__gt=0, qty_in_stock__lte=3)
     out_of_stock_variants = tracked_variants.filter(qty_in_stock=0)
+    recent_orders = (
+        Order.objects.prefetch_related("items__product", "items__variant")
+        .order_by("-created_at")[:100]
+    )
+    paid_order_count = Order.objects.filter(status=Order.STATUS_PAID).count()
+    cancelled_order_count = Order.objects.filter(status=Order.STATUS_CANCELLED).count()
 
     context = {
         "product_count": Product.objects.filter(is_active=True).count(),
@@ -595,9 +628,13 @@ def manager_dashboard(request):
         "low_stock_count": low_stock_variants.count(),
         "out_of_stock_count": out_of_stock_variants.count(),
         "pending_order_count": Order.objects.filter(status=Order.STATUS_PENDING).count(),
+        "paid_order_count": paid_order_count,
+        "cancelled_order_count": cancelled_order_count,
         "low_stock_variants": low_stock_variants,
         "out_of_stock_variants": out_of_stock_variants,
         "tracked_variants": tracked_variants[:100],
+        "recent_orders": recent_orders,
+        "order_status_choices": Order.STATUS_CHOICES,
     }
     return render(request, "manager_dashboard.html", context)
 
